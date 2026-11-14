@@ -128,7 +128,7 @@ nl:{s:"Thermische & energie-audit",b:"START SCANNER",l1:"LEK",l2:"STROOM",l3:"DI
 const $=id=>document.getElementById(id);
 function showM(t,proMode){$('mtxt').textContent=t;$('pkey').style.display=proMode?'block':'none';$('mact').style.display=proMode?'block':'none';$('mod').style.display='flex';}
 $('mcls').onclick=()=>{$('mod').style.display='none';};
-$('leg-lnk').onclick=$('inf-btn').onclick=()=>showM(D[L].leg,false);
+$('leg-lnk').onclick=()=>{location.href='impressum.html';};$('inf-btn').onclick=()=>showM(D[L].leg,false);
 function openPro(){showM(isPro?'PRO LIZENZ AKTIV:\nAlle Sensoren (ΔT, m/s, MIN COLD), Paletten, GPS-Wetter, saubere Foto-Beweise & unbegrenzte Wohnungs-Berichte sind freigeschaltet.':'PRO VERSION FREISCHALTEN:\n• Exakte ΔT & Luftstrom-Messung (m/s)\n• Automatische Kältebrücken-Erkennung (MIN COLD)\n• Alle FLIR-Paletten (RAINBOW / ARCTIC) & Fotos ohne Wasserzeichen\n• GPS-Live-Wetter & unbegrenzter Vermieter-Bericht\n\nBitte Lizenzschlüssel eingeben:',!isPro);}
 $('pro-btn').onclick=$('box-v2').onclick=openPro;
 function updateProUI(){if(isPro){$('pro-btn').textContent='PRO ✓';$('gps-btn').textContent='GPS AUTO';$('rep-btn').textContent='PRO BERICHT EXPORT (HTML)';}}
