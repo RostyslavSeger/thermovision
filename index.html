@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>ThermoVision PRO v10</title>
+<title>ThermoVision PRO</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:sans-serif;}
 body{background:#05070e;color:#fff;overflow:hidden;}
@@ -18,7 +18,7 @@ body{background:#05070e;color:#fff;overflow:hidden;}
 #go{background:linear-gradient(90deg,#ff3b30,#ff9500);color:#fff;border:none;padding:15px 28px;border-radius:14px;font-size:15px;font-weight:bold;}
 #main{position:fixed;inset:0;display:none;flex-direction:column;}
 .tab{flex:1;position:relative;overflow-y:auto;display:none;padding-bottom:60px;}.tab.act{display:block;}
-  #v{position:fixed;width:2px;height:2px;opacity:0.01;pointer-events:none;}#ar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
+#v{position:fixed;width:2px;height:2px;opacity:0.01;pointer-events:none;}#ar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
 .hud{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;padding-bottom:56px;}
 .top{pointer-events:auto;display:flex;justify-content:space-between;align-items:center;padding:8px;background:rgba(0,0,0,.84);gap:4px;}
 .bs{background:#1e293b;color:#fff;border:1px solid #475569;padding:6px 7px;border-radius:8px;font-size:10px;font-weight:bold;}
@@ -48,7 +48,7 @@ body{background:#05070e;color:#fff;overflow:hidden;}
 <div id="s0">
   <div class="tag">COMMERCIAL BUILDING AUDIT SUITE</div>
   <div class="logo">THERMOVISION <span>PRO</span></div>
-  <div class="ver">v10.0 GUIDED EDITION</div>
+  <div class="ver">v10.1 RELEASE EDITION</div>
   <div class="sub" id="ts">Wärmebild-, Luftstrom- & Energie-Audit</div>
   <div class="langs">
     <button class="lb on" data-l="de">DE</button><button class="lb" data-l="en">EN</button>
@@ -112,9 +112,10 @@ body{background:#05070e;color:#fff;overflow:hidden;}
   </div>
   <div class="nav"><button class="nb on" data-t="t1">SCANNER</button><button class="nb" data-t="t2">AUDIT €</button><button class="nb" data-t="t3">SCHIMMEL</button><button class="nb" data-t="t4">BERICHT</button></div>
 </div>
-<div id="mod"><div class="mbox"><div id="mtxt"></div><input type="text" id="pkey" placeholder="PRO-KEY (z.B. SEGER-PRO)" style="display:none;background:#1e293b;color:#fff;border:1px solid #ff9500;padding:8px;border-radius:8px"><button id="mact" style="display:none;background:#32d74b;color:#000;border:none;padding:9px;border-radius:8px;font-weight:bold">AKTIVIEREN</button><button id="mcls" style="background:#ff9500;border:none;padding:10px;border-radius:8px;font-weight:bold">OK</button></div></div>
-<script>
+<div id="mod"><div class="mbox"><div id="mtxt"></div><input type="text" id="pkey" placeholder="PRO-KEY (XXXX-XXXX)" style="display:none;background:#1e293b;color:#fff;border:1px solid #ff9500;padding:8px;border-radius:8px;text-transform:uppercase"><button id="mact" style="display:none;background:#32d74b;color:#000;border:none;padding:9px;border-radius:8px;font-weight:bold">AKTIVIEREN</button><button id="mcls" style="background:#ff9500;border:none;padding:10px;border-radius:8px;font-weight:bold">OK</button></div></div>
+        <script>
 const _k=String.fromCharCode(82,111,115,116,121,115,108,97,118,32,83,101,103,101,114);
+const _h=location.hostname;if(_h&&_h!=='localhost'&&_h.indexOf('rostyslavseger.github.io')===-1){document.body.innerHTML='';throw new Error('Auth');}
 const D={
 de:{s:"Wärmebild-, Luftstrom- & Energie-Audit",b:"SCANNER STARTEN",l1:"LECK",l2:"STROM",l3:"DICHT",w0:"3-SCHRITT FENSTER-CHECK",wd:"Tippen Sie auf START AUDIT für geführte Prüfung.",w1:"Schritt 1/3: Kamera ruhig auf Glasmitte halten...",w2:"Schritt 2/3: Langsam an seitlicher Dichtung führen...",w3:"Schritt 3/3: Untere Kante / Fensterbank prüfen...",leg:"RECHTLICHER HINWEIS:\n1. Kein IR-Sensor: Akustisch-optische Schätzung (Optical Flow & Mikrofon). Keine echte Wärmebildkamera.\n2. Keine Gewähr: Alle Werte sind unverbindliche Richtwerte. Jegliche Haftung für Bauschäden, Schimmel oder Verluste ist ausgeschlossen.\n3. Datenschutz (DSGVO): 100% lokale Verarbeitung auf Ihrem Gerät."},
 en:{s:"Thermal, Airflow & Energy Audit Suite",b:"START SCANNER",l1:"LEAK",l2:"FLOW",l3:"SEAL",w0:"3-STEP WINDOW CHECK",wd:"Tap START AUDIT for guided inspection.",w1:"Step 1/3: Hold steady at glass center...",w2:"Step 2/3: Move slowly along side seal...",w3:"Step 3/3: Check bottom sill edge...",leg:"LEGAL DISCLAIMER:\n1. No IR Sensor: Acoustic-optical estimation (Optical Flow & Mic). Not a true thermal IR camera.\n2. No Liability: Readings are indicative estimates only. Developer assumes no liability for damages, mold, or financial loss.\n3. Privacy (GDPR): 100% local processing on your device."},
@@ -125,13 +126,14 @@ fr:{s:"Audit thermique et énergie",b:"LANCER SCANNER",l1:"FUITE",l2:"FLUX",l3:"
 es:{s:"Auditoría térmica y energía",b:"INICIAR ESCÁNER",l1:"FUGA",l2:"FLUJO",l3:"NORMAL",w0:"REVISIÓN DE VENTANA EN 3 PASOS",wd:"Pulse START AUDIT para iniciar.",w1:"Paso 1/3: Centro del cristal...",w2:"Paso 2/3: Junta lateral...",w3:"Paso 3/3: Borde inferior...",leg:"AVISO LEGAL:\n1. Sin sensor IR: Indicador óptico-acústico.\n2. Sin responsabilidad: Valores orientativos.\n3. Privacidad (RGPD): Procesamiento 100% local."},
 nl:{s:"Thermische & energie-audit",b:"START SCANNER",l1:"LEK",l2:"STROOM",l3:"DICHT",w0:"3-STAPPEN RAAMCONTROLE",wd:"Tik op START AUDIT.",w1:"Stap 1/3: Midden van het glas...",w2:"Stap 2/3: Zijafdichting...",w3:"Stap 3/3: Onderkant kozijn...",leg:"DISCLAIMER:\n1. Geen IR-sensor: Optisch-akoestische indicator.\n2. Geen aansprakelijkheid: Indicatieve waarden.\n3. Privacy (AVG): 100% lokale verwerking."}
 };
-  let L='de',pal='IRON',baseN=32,wH=new Array(40).fill(0),st=false,torch=false,logs=[],isPro=localStorage.getItem('tv_pro')==='1';
+          let L='de',pal='IRON',baseN=32,wH=new Array(40).fill(0),st=false,torch=false,logs=[],isPro=localStorage.getItem('tv_pro')==='1';
 const $=id=>document.getElementById(id);
 function showM(t,proMode){$('mtxt').textContent=t;$('pkey').style.display=proMode?'block':'none';$('mact').style.display=proMode?'block':'none';$('mod').style.display='flex';}
 $('mcls').onclick=()=>{$('mod').style.display='none';};
 $('leg-lnk').onclick=$('inf-btn').onclick=()=>showM(D[L].leg,false);
-$('pro-btn').onclick=()=>showM(isPro?'PRO LIZENZ AKTIV (Unlimited Export & Multi-Room Audit)':'PRO VERSION (9,99 €):\nSchaltet unbegrenzte Wohnungs-Protokolle & Vermieter-Exporte frei.\nTest-Key: SEGER-PRO',!isPro);
-$('mact').onclick=()=>{if($('pkey').value.trim().toUpperCase()==='SEGER-PRO'){isPro=true;localStorage.setItem('tv_pro','1');$('pro-btn').textContent='PRO ✓';showM('PRO Erfolgreich aktiviert!',false);}else{alert('Falscher Key');}};
+$('pro-btn').onclick=()=>showM(isPro?'PRO LIZENZ AKTIV (Unlimited Export & Multi-Room Audit)':'PRO VERSION (9,99 €):\nSchaltet unbegrenzte Wohnungs-Protokolle & Vermieter-Exporte frei.\nBitte geben Sie Ihren Lizenzschlüssel ein:',!isPro);
+async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+$('mact').onclick=async()=>{const hash=await sha256($('pkey').value.trim().toUpperCase());if(hash==='a31932d67bc57268e4234385046917045e082610c3153f56b8e04e599d6229b9'){isPro=true;localStorage.setItem('tv_pro','1');$('pro-btn').textContent='PRO ✓';showM('PRO Lizenz erfolgreich aktiviert!',false);}else{alert('Ungültiger Lizenzschlüssel');}};
 if(isPro)$('pro-btn').textContent='PRO ✓';
 $('home-btn').onclick=()=>{$('main').style.display='none';$('s0').style.display='flex';};
 function setL(c){if(!D[c])return;L=c;const d=D[c];$('ts').textContent=d.s;$('go').textContent=d.b;$('l1').textContent=d.l1;$('l2').textContent=d.l2;$('l3').textContent=d.l3;$('w-title').textContent=d.w0;$('w-desc').textContent=d.wd;document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.dataset.l===c));}
@@ -145,8 +147,8 @@ function cD(){const t=+$('dt').value||19,h=Math.min(100,Math.max(1,+$('dh').valu
 $('add-btn').onclick=()=>{logs.push({n:$('r-name').value||'Raum',e:curEur,k:curKwh,g:$('grd').textContent});renderLogs();showM('Gespeichert: '+$('r-name').value,false);};
 function renderLogs(){const box=$('log-list');box.innerHTML='';let sum=0;logs.forEach(x=>{sum+=x.e;const el=document.createElement('div');el.className='item';el.innerHTML='<span><b>'+x.n+'</b> (Kl. '+x.g+')</span><span>'+x.e.toFixed(1)+' €</span>';box.appendChild(el);});$('tot-eur').textContent=sum.toFixed(1)+' € / J';}
 $('gps-btn').onclick=function(){const b=this;b.textContent='...';navigator.geolocation.getCurrentPosition(async p=>{try{const r=await fetch('https://open-meteo.com'),j=await r.json();$('to').value=j.current.temperature_2m;$('dh').value=j.current.relative_humidity_2m;cA();cD();b.textContent=j.current.temperature_2m+'°C';}catch(e){b.textContent='ERR';}},()=>b.textContent='NO GPS');};
-$('rep-btn').onclick=()=>{if(!isPro){$('pro-btn').click();return;}let rows=logs.map(x=>'<tr><td>'+x.n+'</td><td>'+x.g+'</td><td>'+x.k+' kWh</td><td>'+x.e.toFixed(1)+' €</td></tr>').join('');if(!rows)rows='<tr><td>'+$('r-name').value+'</td><td>'+$('grd').textContent+'</td><td>'+curKwh+' kWh</td><td>'+curEur.toFixed(1)+' €</td></tr>';const h='<html><body style="font-family:sans-serif;padding:24px"><h2>ThermoVision PRO - Energie & Gebäudeaudit</h2><p>Datum: '+new Date().toLocaleString()+'</p><table border="1" cellpadding="8" cellspacing="0" style="width:100%;border-collapse:collapse"><tr><th>Raum</th><th>Klasse</th><th>Verlust</th><th>Kosten/Jahr</th></tr>'+rows+'</table><p><b>Taupunkt:</b> '+$('dval').textContent+' ('+$('dst').textContent+')</p></body></html>';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([h],{type:'text/html'}));a.download='Gebaeude-Audit-PRO.html';a.click();};
-  function pIron(o,i,v){if(v<64){o.data[i]=v*1.5;o.data[i+1]=0;o.data[i+2]=v*2.5;}else if(v<128){o.data[i]=96+(v-64)*2.4;o.data[i+1]=0;o.data[i+2]=160-(v-64)*2;}else if(v<192){o.data[i]=255;o.data[i+1]=(v-128)*3.2;o.data[i+2]=0;}else{o.data[i]=255;o.data[i+1]=205+(v-192)*.8;o.data[i+2]=(v-192)*4;}o.data[i+3]=255;}
+$('rep-btn').onclick=()=>{if(!isPro){$('pro-btn').click();return;}let rows=logs.map(x=>'<tr><td>'+x.n+'</td><td>'+x.g+'</td><td>'+x.k+' kWh</td><td>'+x.e.toFixed(1)+' €</td></tr>').join('');if(!rows)rows='<tr><td>'+$('r-name').value+'</td><td>'+$('grd').textContent+'</td><td>'+curKwh+' kWh</td><td>'+curEur.toFixed(1)+' €</td></tr>';const h='<html><body style="font-family:sans-serif;padding:24px"><h2>ThermoVision PRO - Energie & Gebäudeaudit</h2><p>Datum: '+new Date().toLocaleString()+'</p><table border="1" cellpadding="8" cellspacing="0" style="width:100%;border-collapse:collapse"><tr><th>Raum</th><th>Klasse</th><th>Verlust</th><th>Kosten/Jahr</th></tr>'+rows+'</table><p><b>Taupunkt aktuell:</b> '+$('dval').textContent+' ('+$('dst').textContent+')</p></body></html>';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([h],{type:'text/html'}));a.download='Gebaeude-Audit-PRO.html';a.click();};
+          function pIron(o,i,v){if(v<64){o.data[i]=v*1.5;o.data[i+1]=0;o.data[i+2]=v*2.5;}else if(v<128){o.data[i]=96+(v-64)*2.4;o.data[i+1]=0;o.data[i+2]=160-(v-64)*2;}else if(v<192){o.data[i]=255;o.data[i+1]=(v-128)*3.2;o.data[i+2]=0;}else{o.data[i]=255;o.data[i+1]=205+(v-192)*.8;o.data[i+2]=(v-192)*4;}o.data[i+3]=255;}
 let wizStep=0,wizMax=0,cL=0,sm=0;
 $('wiz-btn').onclick=function(){if(wizStep>0)return;wizStep=1;wizMax=0;baseN=cL+1.5;const d=D[L];$('w-desc').textContent=d.w1;$('w-bar').style.width='33%';setTimeout(()=>{wizStep=2;$('w-desc').textContent=d.w2;$('w-bar').style.width='66%';},3000);setTimeout(()=>{wizStep=3;$('w-desc').textContent=d.w3;$('w-bar').style.width='100%';},7000);setTimeout(()=>{wizStep=0;$('w-bar').style.width='0%';$('w-desc').textContent=d.wd;const lossEur=Math.round(wizMax*1.4);showM(wizMax>15?'AUDIT ERGEBNIS: Leckage ('+wizMax+'%) erkannt! Geschätzter Mehrverlust: ~'+lossEur+' €/Jahr. Empfehlung: Fenster-Exzenter nachstellen oder Dichtung tauschen (Kosten ~15 €).':'AUDIT ERGEBNIS: Fensterdichtung ist in gutem Zustand (Leck-Index '+wizMax+'%).',false);},11000);};
 $('go').onclick=async()=>{
