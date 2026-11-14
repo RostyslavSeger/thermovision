@@ -1,43 +1,24 @@
-let mode='OPTICAL',pal='IRON',baseN=35,waveHist=new Array(40).fill(0),started=false;
-function paintIron(o,i,v){
-  if(v<64){o.data[i]=v*1.5;o.data[i+1]=0;o.data[i+2]=v*2.5;}
-  else if(v<128){o.data[i]=96+(v-64)*2.4;o.data[i+1]=0;o.data[i+2]=160-(v-64)*2;}
-  else if(v<192){o.data[i]=255;o.data[i+1]=(v-128)*3.2;o.data[i+2]=0;}
-  else{o.data[i]=255;o.data[i+1]=205+(v-192)*0.8;o.data[i+2]=(v-192)*4;}
-  o.data[i+3]=255;
-}
-document.getElementById('go').onclick=async()=>{
-  document.getElementById('s0').style.display='none';
-  document.getElementById('main').style.display='flex';
-  if(started)return;started=true;
-  const vid=document.getElementById('v'),ar=document.getElementById('ar'),ax=ar.getContext('2d');
-  let an=null,dt=null,bW=23.4,pF=null,cL=0,sm=0;
-  document.getElementById('pal-btn').onclick=function(){pal=pal==='IRON'?'RAINBOW':(pal==='RAINBOW'?'OFF':'IRON');this.textContent='FLIR: '+pal};
-  document.getElementById('md-btn').onclick=function(){mode=mode==='OPTICAL'?'AIRFLOW':'OPTICAL';this.textContent=mode};
-  document.getElementById('cal-btn').onclick=function(){baseN=cL+4;this.textContent='CAL ('+Math.round(baseN)+')'};
-  try{vid.srcObject=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}})}catch(e){}
-  try{const aS=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}),cx=new(window.AudioContext||window.webkitAudioContext)();if(cx.state==='suspended')await cx.resume();const sr=cx.createMediaStreamSource(aS);an=cx.createAnalyser();an.fftSize=2048;sr.connect(an);dt=new Uint8Array(an.frequencyBinCount);bW=cx.sampleRate/an.fftSize}catch(e){}
-  const off=document.createElement('canvas');off.width=96;off.height=96;const ox=off.getContext('2d',{willReadFrequently:true});
-  const thC=document.createElement('canvas');thC.width=96;thC.height=96;const thX=thC.getContext('2d');
-  document.getElementById('snap').onclick=()=>{const a=document.createElement('a');a.download='ThermoVision-'+Date.now()+'.png';a.href=ar.toDataURL();a.click()};
-  function lp(){
-    requestAnimationFrame(lp);if(document.getElementById('main').style.display==='none')return;
-    ar.width=innerWidth;ar.height=innerHeight;const cx=ar.width/2,cy=ar.height/2;let rw=0,cLum=0,bLum=0;
-    if(vid.readyState>=2){
-      ox.drawImage(vid,0,0,96,96);const im=ox.getImageData(0,0,96,96).data;
-      if(pal!=='OFF'){const out=thX.createImageData(96,96);for(let i=0;i<im.length;i+=4){const lum=im[i]*.299+im[i+1]*.587+im[i+2]*.114;if(pal==='IRON')paintIron(out,i,lum);else{out.data[i]=lum;out.data[i+1]=255-Math.abs(lum-128)*2;out.data[i+2]=255-lum;out.data[i+3]=255}}thX.putImageData(out,0,0);ax.drawImage(thC,0,0,ar.width,ar.height)}else ax.drawImage(vid,0,0,ar.width,ar.height);
-      let cD=0,bD=0;for(let y=0;y<96;y++)for(let x=0;x<96;x++){const i=(y*96+x)*4,lum=im[i]*.3+im[i+1]*.6+im[i+2]*.1;if(x>=34&&x<=62&&y>=34&&y<=62){cLum+=lum;if(pF)cD+=Math.abs(im[i]-pF[i])+Math.abs(im[i+1]-pF[i+1])}else{bLum+=lum;if(pF)bD+=Math.abs(im[i]-pF[i])+Math.abs(im[i+1]-pF[i+1])}}
-      if(mode==='OPTICAL'&&pF)rw=Math.min(100,Math.round(Math.max(0,(cD/841)-((bD/8375)*1.5)-sens)*4.5));pF=new Uint8ClampedArray(im);
-    }
-    if(mode==='AIRFLOW'&&an){an.getByteFrequencyData(dt);const b1=Math.max(1,Math.floor(20/bW)),b2=Math.floor(220/bW),b3=Math.floor(3000/bW);let lS=0,mS=0;for(let i=b1;i<=b2;i++)lS+=dt[i];for(let i=b2+1;i<=b3;i++)mS+=dt[i];cL=lS/(b2-b1+1);if(cL>baseN&&(cL/((mS/(b3-b2))||1))>1.35)rw=Math.min(100,Math.round((cL-baseN)*3))}
-    sm=Math.round(sm*.75+rw*.25);waveHist.push(sm);waveHist.shift();
-    const d=D[L],pl=document.getElementById('pill');document.getElementById('v1').textContent=sm+'%';document.getElementById('v2').textContent=(sm*.035).toFixed(2)+' m/s';document.getElementById('v3').textContent=(100-sm)+'%';
-    ax.strokeStyle='rgba(255,255,255,.7)';ax.lineWidth=1.5;ax.strokeRect(cx-60,cy-60,120,120);
-    const dT=((cLum/841)-(bLum/8375))*0.08;ax.fillStyle='#ffcc00';ax.font='bold 11px sans-serif';ax.fillText('ΔT: '+(dT>=0?'+':'')+dT.toFixed(1)+'°C',cx-55,cy-66);
-    ax.beginPath();ax.strokeStyle='#00e5ff';waveHist.forEach((v,idx)=>{const px=cx-55+(idx*2.8),py=cy+50-(v*.4);idx===0?ax.moveTo(px,py):ax.lineTo(px,py)});ax.stroke();
-    if(sm>12){pl.textContent=d.lk;pl.style.color='#ffcc00';const r=65+sm*1.2,g=ax.createRadialGradient(cx,cy,5,cx,cy,r);g.addColorStop(0,'rgba(255,255,255,.85)');g.addColorStop(.4,'rgba(255,204,0,.6)');g.addColorStop(1,'rgba(255,0,0,0)');ax.fillStyle=g;ax.beginPath();ax.arc(cx,cy,r,0,Math.PI*2);ax.fill()}else{pl.textContent=d.ok;pl.style.color='#00e5ff'}
-  }lp();
-};.hud{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;padding-bottom:56px;}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ThermoVision PRO</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:sans-serif;}
+body{background:#06080f;color:#fff;overflow:hidden;}
+#s0{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at top,#1c0b33,#06080f);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:14px;}
+.tag{font-size:10px;font-weight:bold;color:#ff9500;background:rgba(255,149,0,.15);padding:5px 12px;border-radius:12px;border:1px solid #ff9500;}
+.logo{font-size:28px;font-weight:900;}.logo span{color:#ff3b30;}
+.sub{font-size:13px;color:#cbd5e1;max-width:290px;}
+.langs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;max-width:300px;}
+.lb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:10px;border-radius:8px;font-weight:bold;}
+.lb.on{background:linear-gradient(90deg,#ff3b30,#ff9500);border-color:#ffcc00;}
+#go{background:linear-gradient(90deg,#ff3b30,#ff9500);color:#fff;border:none;padding:16px 28px;border-radius:14px;font-size:15px;font-weight:bold;}
+#main{position:fixed;inset:0;display:none;flex-direction:column;}
+.tab{flex:1;position:relative;overflow-y:auto;display:none;padding-bottom:58px;}.tab.act{display:block;}
+#v{display:none;}#ar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
+  .hud{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;padding-bottom:56px;}
 .top{pointer-events:auto;display:flex;justify-content:space-between;align-items:center;padding:8px;background:rgba(0,0,0,.8);gap:4px;}
 .bs{background:#1e293b;color:#fff;border:1px solid #475569;padding:6px 7px;border-radius:8px;font-size:10px;font-weight:bold;}
 #pill{align-self:center;background:rgba(0,0,0,.85);border:1px solid #ff9500;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:bold;color:#ffcc00;}
@@ -59,7 +40,8 @@ document.getElementById('go').onclick=async()=>{
 #mod{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:20px;}
 .mbox{background:#111625;border:1px solid #ff9500;border-radius:14px;padding:16px;max-width:340px;font-size:12px;line-height:1.5;display:flex;flex-direction:column;gap:10px;}
 </style>
-    </head>>
+</head>
+<body>
 <div id="s0">
   <div class="tag">THERMAL & ENERGY AUDIT PRO</div>
   <div class="logo">THERMOVISION <span>PRO</span></div>
@@ -110,7 +92,8 @@ document.getElementById('go').onclick=async()=>{
   </div>
   <div class="nav"><button class="nb on" data-t="t1">AR SCANNER</button><button class="nb" data-t="t2">AUDIT €</button><button class="nb" data-t="t3">SCHIMMEL</button></div>
 </div>
-<div id="mod"><div class="mbox"><div id="mtxt"></div><button id="mcls" style="background:#ff9500;border:none;padding:10px;border-radius:8px;font-weight:bold">OK</button></div></div><script>
+<div id="mod"><div class="mbox"><div id="mtxt"></div><button id="mcls" style="background:#ff9500;border:none;padding:10px;border-radius:8px;font-weight:bold">OK</button></div></div>
+<script>
 const _k=String.fromCharCode(82,111,115,116,121,115,108,97,118,32,83,101,103,101,114);
 const D={
 de:{s:"Wärmebild- & Energie-Audit",b:"SCANNER STARTEN",sc:"KAMERA AUF FENSTER RICHTEN",lk:"LUFTSTROM ERKANNT!",ok:"KEINE ZUGLUFT",l1:"LECK",l2:"STROM",l3:"DICHT",leg:"DSGVO: Akustisch-optischer Indikator (kein IR). 100% lokal."},
@@ -132,8 +115,9 @@ function setL(c){if(!D[c])return;L=c;const d=D[c];$('ts').textContent=d.s;$('go'
 document.querySelectorAll('.lb').forEach(b=>b.onclick=()=>setL(b.dataset.l));
 $('sr').oninput=function(){sens=+this.value;$('sv').textContent=sens;};
 document.querySelectorAll('.nb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('act'));b.classList.add('on');$(b.dataset.t).classList.add('act');});
-function cA(){let u=+$('uw').value||2.8;if($('c1').checked)u+=.4;if($('c2').checked)u+=.5;const a=+$('am').value||1.8,ti=+$('ti').value||20,to=+$('to').value||5,pr=+$('pr').value||.14,k=Math.round(u*a*Math.max(0,ti-to)*4.32),e=k*pr,sv=Math.max(0,e-(Math.round(.8*a*Math.max(0,ti-to)*4.32)*pr));$('eres').textContent=e.toFixed(1)+' € / Jahr';$('kres').textContent=k+' kWh';$('sav-txt').textContent='Ersparnis 3-fach: +'+sv.toFixed(0)+' €';const g=$('grd');if(u<=.9){g.textContent='A+';g.style.background='#32d74b';}else if(u<=1.4){g.textContent='B';g.style.background='#84cc16';}else if(u<=2.8){g.textContent='E';g.style.background='#ff9500';}else{g.textContent='G';g.style.background='#ff3b30';}}
-['uw','am','ti','to','pr','c1','c2'].forEach(i=>$(i).oninput=cA);cA();function cD(){const t=+$('dt').value||19,h=Math.min(100,Math.max(1,+$('dh').value||60)),w=+$('dw').value||12,al=((17.27*t)/(237.7+t))+Math.log(h/100),dp=(237.7*al)/(17.27-al);$('dval').textContent=dp.toFixed(1)+' °C';const s=$('dst');if(w<=dp+.5){s.textContent='SCHIMMEL-GEFAHR!';s.style.color='#ff3b30';}else if(w<=dp+2.5){s.textContent='WARNUNG';s.style.color='#ffcc00';}else{s.textContent='SICHER';s.style.color='#32d74b';}}
+  function cA(){let u=+$('uw').value||2.8;if($('c1').checked)u+=.4;if($('c2').checked)u+=.5;const a=+$('am').value||1.8,ti=+$('ti').value||20,to=+$('to').value||5,pr=+$('pr').value||.14,k=Math.round(u*a*Math.max(0,ti-to)*4.32),e=k*pr,sv=Math.max(0,e-(Math.round(.8*a*Math.max(0,ti-to)*4.32)*pr));$('eres').textContent=e.toFixed(1)+' € / Jahr';$('kres').textContent=k+' kWh';$('sav-txt').textContent='Ersparnis 3-fach: +'+sv.toFixed(0)+' €';const g=$('grd');if(u<=.9){g.textContent='A+';g.style.background='#32d74b';}else if(u<=1.4){g.textContent='B';g.style.background='#84cc16';}else if(u<=2.8){g.textContent='E';g.style.background='#ff9500';}else{g.textContent='G';g.style.background='#ff3b30';}}
+['uw','am','ti','to','pr','c1','c2'].forEach(i=>$(i).oninput=cA);cA();
+function cD(){const t=+$('dt').value||19,h=Math.min(100,Math.max(1,+$('dh').value||60)),w=+$('dw').value||12,al=((17.27*t)/(237.7+t))+Math.log(h/100),dp=(237.7*al)/(17.27-al);$('dval').textContent=dp.toFixed(1)+' °C';const s=$('dst');if(w<=dp+.5){s.textContent='SCHIMMEL-GEFAHR!';s.style.color='#ff3b30';}else if(w<=dp+2.5){s.textContent='WARNUNG';s.style.color='#ffcc00';}else{s.textContent='SICHER';s.style.color='#32d74b';}}
 ['dt','dh','dw'].forEach(i=>$(i).oninput=cD);cD();
 $('gps-btn').onclick=function(){const b=this;b.textContent='...';navigator.geolocation.getCurrentPosition(async p=>{try{const r=await fetch('https://open-meteo.com'),j=await r.json();$('to').value=j.current.temperature_2m;$('dh').value=j.current.relative_humidity_2m;cA();cD();b.textContent=j.current.temperature_2m+'°C';}catch(e){b.textContent='ERR';}},()=>b.textContent='NO GPS');};
 $('rep-btn').onclick=()=>{const h='<html><body style="font-family:sans-serif;padding:20px"><h2>ThermoVision PRO</h2><p>'+new Date().toLocaleString()+'</p><p>Verlust: '+$('eres').textContent+' ('+$('grd').textContent+')</p><p>Taupunkt: '+$('dval').textContent+' - '+$('dst').textContent+'</p></body></html>';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([h],{type:'text/html'}));a.download='Bericht.html';a.click();};
@@ -164,4 +148,3 @@ if(sm>12){pl.textContent=d.lk;pl.style.color='#ffcc00';const r=65+sm*1.2,g=ax.cr
 </script>
 </body>
 </html>
-        
