@@ -6,41 +6,44 @@
 <title>ThermoVision PRO</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:sans-serif}
-body{background:#070910;color:#fff;overflow:hidden}
-#s0{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at top,#1c0b33,#070910);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:14px}
+body{background:#06080f;color:#fff;overflow:hidden}
+#s0{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at top,#1c0b33,#06080f);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:14px}
 .tag{font-size:10px;font-weight:bold;color:#ff9500;background:rgba(255,149,0,.15);padding:5px 12px;border-radius:12px;border:1px solid #ff9500}
-.logo{font-size:26px;font-weight:900}.logo span{color:#ff3b30}
+.logo{font-size:28px;font-weight:900}.logo span{color:#ff3b30}
 .sub{font-size:13px;color:#cbd5e1;max-width:290px}
 .langs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;max-width:300px}
 .lb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:10px;border-radius:8px;font-weight:bold}
 .lb.on{background:linear-gradient(90deg,#ff3b30,#ff9500);border-color:#ffcc00}
-#go{background:linear-gradient(90deg,#ff3b30,#ff9500);color:#fff;border:none;padding:16px 26px;border-radius:14px;font-size:15px;font-weight:bold}
-#leg-lnk{font-size:11px;color:#64748b;text-decoration:underline;margin-top:6px}
+#go{background:linear-gradient(90deg,#ff3b30,#ff9500);color:#fff;border:none;padding:16px 28px;border-radius:14px;font-size:15px;font-weight:bold}
 #main{position:fixed;inset:0;display:none;flex-direction:column}
-.tab{flex:1;position:relative;overflow-y:auto;display:none;padding-bottom:65px}
+.tab{flex:1;position:relative;overflow-y:auto;display:none;padding-bottom:58px}
 .tab.act{display:block}
-#v,#ar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#ar{z-index:2;pointer-events:none}
-.hud{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
-.top{pointer-events:auto;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(0,0,0,.75);gap:6px}
-.btn-s{background:#1e293b;color:#fff;border:1px solid #475569;padding:6px 9px;border-radius:8px;font-size:11px;font-weight:bold}
-#pill{align-self:center;background:rgba(0,0,0,.85);border:1px solid #555;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:bold}
-.bot{pointer-events:auto;background:rgba(7,9,16,.92);padding:10px 14px;display:flex;flex-direction:column;gap:8px;align-items:center}
-.sens-row{display:flex;align-items:center;gap:8px;width:100%;font-size:11px;color:#94a3b8}.sens-row input{flex:1}
-#snap{width:52px;height:52px;border-radius:50%;background:#fff;border:4px solid #ff9500;color:#000;font-weight:900;font-size:11px}
-.gd{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;width:100%}.gd small{display:block;font-size:9px;color:#94a3b8}.gd b{font-size:14px;color:#ffcc00}
-.card{background:#111625;border:1px solid #1e293b;border-radius:14px;padding:14px;margin:12px;display:flex;flex-direction:column;gap:10px}
-.card h3{font-size:15px;color:#ff9500}.row{display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:8px}
-.row select,.row input{background:#1e293b;color:#fff;border:1px solid #334155;padding:7px;border-radius:8px;width:130px;text-align:right}
-.res-box{background:rgba(255,149,0,.12);border:1px solid #ff9500;border-radius:10px;padding:12px;text-align:center}.res-box b{font-size:22px;color:#ffcc00;display:block}
-.nav{position:fixed;bottom:0;left:0;right:0;height:56px;background:#0b0e17;border-top:1px solid #1e293b;display:grid;grid-template-columns:repeat(3,1fr);z-index:40}
-.nb{background:none;border:none;color:#64748b;font-size:11px;font-weight:bold;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.nb.on{color:#ff9500;background:rgba(255,149,0,.08)}
+#v{display:none}#ar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.hud{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;padding-bottom:56px}
+.top{pointer-events:auto;display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(0,0,0,.78);gap:4px}
+.bs{background:#1e293b;color:#fff;border:1px solid #475569;padding:6px 8px;border-radius:8px;font-size:11px;font-weight:bold}
+#pill{align-self:center;background:rgba(0,0,0,.85);border:1px solid #ff9500;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:bold;color:#ffcc00}
+.bot{pointer-events:auto;background:rgba(6,8,15,.94);padding:8px 12px;display:flex;flex-direction:column;gap:6px}
+.srow{display:flex;align-items:center;gap:8px;font-size:11px;color:#94a3b8}.srow input{flex:1}
+.brow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#snap{width:48px;height:48px;border-radius:50%;background:#fff;border:3px solid #ff9500;color:#000;font-weight:900;font-size:10px;flex-shrink:0}
+.gd{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;text-align:center;flex:1;background:rgba(255,255,255,.06);padding:6px;border-radius:10px}
+.gd small{display:block;font-size:8px;color:#94a3b8}.gd b{font-size:13px;color:#ffcc00}
+.card{background:#111625;border:1px solid #1e293b;border-radius:14px;padding:14px;margin:10px;display:flex;flex-direction:column;gap:9px}
+.card h3{font-size:14px;color:#ff9500;display:flex;justify-content:space-between;align-items:center}
+.row{display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:8px}
+.row select,.row input{background:#1e293b;color:#fff;border:1px solid #334155;padding:6px;border-radius:8px;width:125px;text-align:right}
+.rbox{background:rgba(255,149,0,.12);border:1px solid #ff9500;border-radius:10px;padding:10px;text-align:center}.rbox b{font-size:20px;color:#ffcc00;display:block}
+.grade{display:inline-block;padding:3px 10px;border-radius:6px;font-weight:900;font-size:14px;background:#ff3b30;color:#fff}
+.nav{position:fixed;bottom:0;left:0;right:0;height:54px;background:#0b0e17;border-top:1px solid #1e293b;display:grid;grid-template-columns:repeat(3,1fr);z-index:40}
+.nb{background:none;border:none;color:#64748b;font-size:11px;font-weight:bold}.nb.on{color:#ff9500;background:rgba(255,149,0,.1)}
 #mod{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:20px}
-.mbox{background:#111625;border:1px solid #ff9500;border-radius:14px;padding:18px;max-width:340px;font-size:12px;line-height:1.5;display:flex;flex-direction:column;gap:12px}
+.mbox{background:#111625;border:1px solid #ff9500;border-radius:14px;padding:16px;max-width:340px;font-size:12px;line-height:1.5;display:flex;flex-direction:column;gap:10px}
 </style>
 </head>
 <body>
 <div id="s0">
-  <div class="tag">ENERGY & THERMAL AUDIT SUITE</div>
+  <div class="tag">THERMAL & ENERGY AUDIT PRO</div>
   <div class="logo">THERMOVISION <span>PRO</span></div>
   <div class="sub" id="ts">Wärmebild-, Luftstrom- & Energie-Audit</div>
   <div class="langs">
@@ -50,85 +53,61 @@ body{background:#070910;color:#fff;overflow:hidden}
     <button class="lb" data-l="es">ES</button><button class="lb" data-l="nl">NL</button>
   </div>
   <button id="go">SCANNER STARTEN</button>
-  <div id="leg-lnk">Legal & DSGVO / GDPR Info</div>
+  <div id="leg-lnk" style="font-size:11px;color:#64748b;text-decoration:underline">Legal & DSGVO / GDPR</div>
 </div>
 <div id="main">
   <div id="t1" class="tab act">
     <video id="v" autoplay playsinline muted></video><canvas id="ar"></canvas>
     <div class="hud">
-      <div class="top"><button class="btn-s" id="md-btn">MODE: OPTICAL</button><button class="btn-s" id="cal-btn">CAL (0)</button><button class="btn-s" id="inf-btn">INFO</button></div>
-      <div id="pill">KAMERA AUF FENSTER / INDIKATOR RICHTEN</div>
+      <div class="top">
+        <button class="bs" id="pal-btn">FLIR: IRON</button>
+        <button class="bs" id="md-btn">OPTICAL</button>
+        <button class="bs" id="cal-btn">CAL</button>
+        <button class="bs" id="inf-btn">INFO</button>
+      </div>
+      <div id="pill">KAMERA AUF FENSTER RICHTEN</div>
       <div class="bot">
-        <div class="sens-row"><span>SENS:</span><input type="range" id="sens-rng" min="1" max="15" value="4"><span id="sens-val">4</span></div>
-        <button id="snap">FOTO</button>
-        <div class="gd"><div><small id="l1">LECK-INDEX</small><b id="v1">0%</b></div><div><small id="l2">LUFTSTROM</small><b id="v2">0.0 m/s</b></div><div><small id="l3">DICHTHEIT</small><b id="v3">100%</b></div></div>
+        <div class="srow"><span>SENS:</span><input type="range" id="sr" min="1" max="15" value="4"><span id="sv">4</span></div>
+        <div class="brow">
+          <button id="snap">FOTO</button>
+          <div class="gd">
+            <div><small id="l1">LECK</small><b id="v1">0%</b></div>
+            <div><small id="l2">STROM</small><b id="v2">0.0 m/s</b></div>
+            <div><small id="l3">DICHT</small><b id="v3">100%</b></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <div id="t2" class="tab">
     <div class="card">
-      <h3>FENSTER WÄRMEVERLUST (DIN/GEG)</h3>
+      <h3><span>FENSTER AUDIT (DIN/GEG)</span><button class="bs" id="gps-btn">📍 GPS AUTO</button></h3>
       <div class="row"><span>Verglasung:</span><select id="uw"><option value="5.0">Einfachglas (5.0)</option><option value="2.8" selected>Doppelglas alt (2.8)</option><option value="1.3">Isolierglas (1.3)</option><option value="0.8">Passivhaus 3-fach (0.8)</option></select></div>
-      <div class="row"><span>Fläche (m²):</span><input type="number" id="ar-m" value="1.8" step="0.1"></div>
+      <div class="row"><span>Fläche (m²):</span><input type="number" id="am" value="1.8" step="0.1"></div>
       <div class="row"><span>Innen (°C):</span><input type="number" id="ti" value="20"></div>
       <div class="row"><span>Außen (°C):</span><input type="number" id="to" value="5"></div>
       <div class="row"><span>Preis (€/kWh):</span><input type="number" id="pr" value="0.14" step="0.01"></div>
-      <div class="res-box"><small>JÄHRLICHER VERLUST</small><b id="eur-res">0 € / Jahr</b><span id="kwh-res" style="font-size:12px;color:#cbd5e1">0 kWh</span></div>
+      <div class="rbox">
+        <div style="margin-bottom:4px">Klasse: <span class="grade" id="grd">E</span></div>
+        <b id="eres">0 € / Jahr</b>
+        <span id="kres" style="font-size:11px;color:#cbd5e1">0 kWh</span>
+        <div id="sav-txt" style="font-size:11px;color:#32d74b;margin-top:4px"></div>
+      </div>
     </div>
   </div>
   <div id="t3" class="tab">
     <div class="card">
-      <h3>TAUPUNKT & SCHIMMEL-RISIKO</h3>
-      <div class="row"><span>Raumtemp (°C):</span><input type="number" id="d-t" value="19"></div>
-      <div class="row"><span>Luftfeuchte (%):</span><input type="number" id="d-h" value="62"></div>
-      <div class="row"><span>Wand/Ecke (°C):</span><input type="number" id="d-w" value="12.5" step="0.5"></div>
-      <div class="res-box"><small>TAUPUNKT</small><b id="dew-val">11.6 °C</b><span id="dew-st" style="font-size:13px;font-weight:bold">OK</span></div>
-      <button id="rep-btn" style="background:#ff9500;color:#000;border:none;padding:12px;border-radius:10px;font-weight:bold">PROTOKOLL KOPIEREN</button>
+      <h3>TAUPUNKT & SCHIMMEL</h3>
+      <div class="row"><span>Raumtemp (°C):</span><input type="number" id="dt" value="19"></div>
+      <div class="row"><span>Luftfeuchte (%):</span><input type="number" id="dh" value="62"></div>
+      <div class="row"><span>Wand/Ecke (°C):</span><input type="number" id="dw" value="12.5" step="0.5"></div>
+      <div class="rbox"><small>TAUPUNKT</small><b id="dval">11.6 °C</b><span id="dst" style="font-size:12px;font-weight:bold">OK</span></div>
+      <button id="rep-btn" style="background:#ff9500;color:#000;border:none;padding:12px;border-radius:10px;font-weight:bold">OFFIZIELLER BERICHT (HTML)</button>
     </div>
   </div>
-  <div class="nav"><button class="nb on" data-t="t1">AR SCANNER</button><button class="nb" data-t="t2">€ / kWh AUDIT</button><button class="nb" data-t="t3">SCHIMMEL / DEW</button></div>
+  <div class="nav"><button class="nb on" data-t="t1">AR SCANNER</button><button class="nb" data-t="t2">€ / kWh AUDIT</button><button class="nb" data-t="t3">SCHIMMEL</button></div>
 </div>
-<div id="mod"><div class="mbox"><div id="m-txt"></div><button id="m-cls" style="background:#ff9500;border:none;padding:10px;border-radius:8px;font-weight:bold">OK</button></div></div>
-<script>
-const _k=String.fromCharCode(82,111,115,116,121,115,108,97,118,32,83,101,103,101,114);
-const D={
-de:{s:"Wärmebild-, Luftstrom- & Energie-Audit",b:"SCANNER STARTEN",sc:"KAMERA AUF FENSTER RICHTEN",lk:"LUFTSTROM ERKANNT!",ok:"KEINE ZUGLUFT",l1:"LECK",l2:"STROM",l3:"DICHT",leg:"Akustisch-optischer Indikator (kein IR-Sensor). Lokale DSGVO-Verarbeitung."},
-en:{s:"Thermal & Airflow Audit Suite",b:"START SCANNER",sc:"POINT AT WINDOW",lk:"AIRFLOW DETECTED!",ok:"NO DRAFT",l1:"LEAK",l2:"FLOW",l3:"SEAL",leg:"Acoustic-optical indicator (not IR). 100% local GDPR processing."},
-ru:{s:"Тепловизионный и энерго-аудит",b:"ЗАПУСТИТЬ СКАНЕР",sc:"НАВЕДИТЕ НА ОКНО",lk:"ПОТОК ВОЗДУХА!",ok:"СКВОЗНЯКА НЕТ",l1:"УТЕЧКА",l2:"ПОТОК",l3:"НОРМА",leg:"Оптико-акустический индикатор (не ИК). Локальная обработка DSGVO."},
-ua:{s:"Тепловізійний та енерго-аудит",b:"ЗАПУСТИТИ СКАНЕР",sc:"НАВЕДІТЬ НА ВІКНО",lk:"ПОТІК ПОВІТРЯ!",ok:"ПРОТЯГУ НЕМАЄ",l1:"ВТРАТА",l2:"ПОТІК",l3:"НОРМА",leg:"Оптико-акустичний індикатор (не ІЧ). Локальна обробка DSGVO."},
-pl:{s:"Audyt termiczny i energii",b:"URUCHOM SKANER",sc:"SKIERUJ NA OKNO",lk:"PRZEPŁYW POWIETRZA!",ok:"BRAK PRZECIĄGU",l1:"STRATA",l2:"PRZEPŁYW",l3:"NORMA",leg:"Wskaźnik optyczno-akustyczny (nie IR). Przetwarzanie RODO."},
-fr:{s:"Audit thermique et énergie",b:"LANCER SCANNER",sc:"POINTEZ LA FENÊTRE",lk:"COURANT D'AIR!",ok:"AUCUN COURANT",l1:"FUITE",l2:"FLUX",l3:"ÉTANCHE",leg:"Indicateur optico-acoustique (pas IR). Traitement RGPD."},
-es:{s:"Auditoría térmica y energía",b:"INICIAR ESCÁNER",sc:"APUNTE A LA VENTANA",lk:"¡FLUJO DE AIRE!",ok:"SIN CORRIENTES",l1:"FUGA",l2:"FLUJO",l3:"NORMAL",leg:"Indicador óptico-acústico (no IR). Procesamiento RGPD."},
-nl:{s:"Thermische & energie-audit",b:"START SCANNER",sc:"RICHT OP HET RAAM",lk:"LUCHTSTROOM!",ok:"GEEN TOCHT",l1:"LEK",l2:"STROOM",l3:"DICHT",leg:"Optisch-akoestische indicator (geen IR). AVG-verwerking."}
-};
-let L='de',mode='OPTICAL',baseN=35,sens=4;
-function setL(c){if(!D[c])return;L=c;const d=D[c];document.getElementById('ts').textContent=d.s;document.getElementById('go').textContent=d.b;document.getElementById('pill').textContent=d.sc;document.getElementById('l1').textContent=d.l1;document.getElementById('l2').textContent=d.l2;document.getElementById('l3').textContent=d.l3;document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.dataset.l===c))}
-document.querySelectorAll('.lb').forEach(b=>b.onclick=()=>setL(b.dataset.l));
-document.getElementById('leg-lnk').onclick=document.getElementById('inf-btn').onclick=()=>{document.getElementById('m-txt').textContent=D[L].leg;document.getElementById('mod').style.display='flex'};
-document.getElementById('m-cls').onclick=()=>document.getElementById('mod').style.display='none';
-document.getElementById('sens-rng').oninput=function(){sens=Number(this.value);document.getElementById('sens-val').textContent=sens};
-document.querySelectorAll('.nb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('act'));b.classList.add('on');document.getElementById(b.dataset.t).classList.add('act')});
-function cA(){const u=+document.getElementById('uw').value||2.8,a=+document.getElementById('ar-m').value||1.8,ti=+document.getElementById('ti').value||20,to=+document.getElementById('to').value||5,pr=+document.getElementById('pr').value||.14,k=Math.round(u*a*Math.max(0,ti-to)*4.32);document.getElementById('eur-res').textContent=(k*pr).toFixed(1)+' € / Jahr';document.getElementById('kwh-res').textContent=k+' kWh / Season'}
-['uw','ar-m','ti','to','pr'].forEach(i=>document.getElementById(i).oninput=cA);cA();
-function cD(){const t=+document.getElementById('d-t').value||19,h=Math.min(100,Math.max(1,+document.getElementById('d-h').value||60)),w=+document.getElementById('d-w').value||12,al=((17.27*t)/(237.7+t))+Math.log(h/100),dp=(237.7*al)/(17.27-al);document.getElementById('dew-val').textContent=dp.toFixed(1)+' °C';const s=document.getElementById('dew-st');if(w<=dp+.5){s.textContent='SCHIMMEL-GEFAHR!';s.style.color='#ff3b30'}else if(w<=dp+2.5){s.textContent='WARNUNG';s.style.color='#ffcc00'}else{s.textContent='SICHER';s.style.color='#32d74b'}}
-['d-t','d-h','d-w'].forEach(i=>document.getElementById(i).oninput=cD);cD();
-document.getElementById('rep-btn').onclick=()=>{const t='ThermoVision PRO | '+new Date().toLocaleDateString()+' | DewPoint: '+document.getElementById('dew-val').textContent+' | '+document.getElementById('dew-st').textContent;if(navigator.clipboard)navigator.clipboard.writeText(t);document.getElementById('m-txt').textContent=t;document.getElementById('mod').style.display='flex'};
-document.getElementById('go').onclick=async()=>{
-document.getElementById('s0').style.display='none';document.getElementById('main').style.display='flex';
-const vid=document.getElementById('v'),ar=document.getElementById('ar'),ax=ar.getContext('2d');let an=null,dt=null,bW=23.4,pF=null,cL=0,sm=0;
-document.getElementById('md-btn').onclick=function(){mode=mode==='OPTICAL'?'AIRFLOW':'OPTICAL';this.textContent='MODE: '+mode};
-document.getElementById('cal-btn').onclick=function(){baseN=cL+4;this.textContent='CAL ('+Math.round(baseN)+')'};
-try{vid.srcObject=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}})}catch(e){}
-try{const aS=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}),cx=new(window.AudioContext||window.webkitAudioContext)();if(cx.state==='suspended')await cx.resume();const sr=cx.createMediaStreamSource(aS);an=cx.createAnalyser();an.fftSize=2048;sr.connect(an);dt=new Uint8Array(an.frequencyBinCount);bW=cx.sampleRate/an.fftSize}catch(e){}
-const off=document.createElement('canvas');off.width=64;off.height=64;const ox=off.getContext('2d',{willReadFrequently:true});
-document.getElementById('snap').onclick=()=>{const c=document.createElement('canvas');c.width=ar.width;c.height=ar.height;const x=c.getContext('2d');x.drawImage(vid,0,0,c.width,c.height);x.drawImage(ar,0,0);x.fillStyle='rgba(0,0,0,.7)';x.fillRect(10,10,260,40);x.fillStyle='#ffcc00';x.font='bold 14px sans-serif';x.fillText('ThermoVision PRO | '+document.getElementById('v1').textContent,18,35);const a=document.createElement('a');a.download='ThermoVision-'+Date.now()+'.png';a.href=c.toDataURL();a.click()};
-function lp(){
-requestAnimationFrame(lp);ar.width=innerWidth;ar.height=innerHeight;ax.clearRect(0,0,ar.width,ar.height);const cx=ar.width/2,cy=ar.height/2;let rw=0;
-if(mode==='OPTICAL'&&vid.readyState>=2){ox.drawImage(vid,0,0,64,64);const im=ox.getImageData(0,0,64,64).data;if(pF){let cD=0,bD=0;for(let y=0;y<64;y++)for(let x=0;x<64;x++){const i=(y*64+x)*4,df=Math.abs(im[i]-pF[i])+Math.abs(im[i+1]-pF[i+1]);if(x>=22&&x<=42&&y>=22&&y<=42)cD+=df;else bD+=df}rw=Math.min(100,Math.round(Math.max(0,(cD/441)-((bD/3655)*1.5)-sens)*5))}pF=new Uint8ClampedArray(im);ax.strokeStyle='rgba(255,255,255,.65)';ax.lineWidth=2;ax.strokeRect(cx-55,cy-55,110,110)}
-else if(mode==='AIRFLOW'&&an){an.getByteFrequencyData(dt);const b1=Math.max(1,Math.floor(20/bW)),b2=Math.floor(220/bW),b3=Math.floor(3000/bW);let lS=0,mS=0;for(let i=b1;i<=b2;i++)lS+=dt[i];for(let i=b2+1;i<=b3;i++)mS+=dt[i];cL=lS/(b2-b1+1);if(cL>baseN&&(cL/((mS/(b3-b2))||1))>1.35)rw=Math.min(100,Math.round((cL-baseN)*3))}
-sm=Math.round(sm*.75+rw*.25);const d=D[L],pl=document.getElementById('pill');document.getElementById('v1').textContent=sm+'%';document.getElementById('v2').textContent=(sm*.035).toFixed(2)+' m/s';document.getElementById('v3').textContent=(100-sm)+'%';
-if(sm>12){pl.textContent=d.lk;pl.style.color='#ffcc00';const r=70+sm*1.3,g=ax.createRadialGradient(cx,cy,5,cx,cy,r);g.addColorStop(0,'rgba(255,255,255,.88)');g.addColorStop(.35,'rgba(255,204,0,.72)');g.addColorStop(.7,'rgba(255,59,48,.48)');g.addColorStop(1,'rgba(0,17,255,0)');ax.fillStyle=g;ax.beginPath();ax.arc(cx,cy,r,0,Math.PI*2);ax.fill()}else{pl.textContent=d.ok;pl.style.color='#00e5ff'}
-}lp()};
-</script>
+<div id="mod"><div class="mbox"><div id="mtxt"></div><button id="mcls" style="background:#ff9500;border:none;padding:10px;border-radius:8px;font-weight:bold">OK</button></div></div>
+<script src="app.js"></script>
 </body>
 </html>
