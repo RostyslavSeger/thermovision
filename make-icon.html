@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body style="background:#111;color:#fff;font-family:sans-serif;text-align:center;padding:20px">
+<h3>Зажмите каждую картинку пальцем и нажмите «Скачать изображение»</h3>
+<p>1. Большая иконка (назовите её <b>icon-512.png</b>):</p>
+<img id="i512" style="width:180px;border-radius:36px;border:2px solid #ff9500"><br><br>
+<p>2. Маленькая иконка (назовите её <b>icon-192.png</b>):</p>
+<img id="i192" style="width:100px;border-radius:20px;border:2px solid #00e5ff">
+<script>
+function draw(s){
+  const c=document.createElement('canvas');c.width=s;c.height=s;const x=c.getContext('2d'),r=s/2;
+  x.fillStyle='#05070e';x.fillRect(0,0,s,s);
+  x.beginPath();x.arc(r,r,s*0.41,Math.PI/2,Math.PI*1.5);x.fillStyle='#ff4500';x.fill();
+  x.beginPath();x.arc(r,r,s*0.41,-Math.PI/2,Math.PI/2);x.fillStyle='#007aff';x.fill();
+  x.strokeStyle='#fff';x.lineWidth=s*0.02;x.beginPath();x.moveTo(r,s*0.09);x.lineTo(r,s*0.91);x.stroke();
+  x.fillStyle='#ffcc00';x.beginPath();x.arc(s*0.32,r,s*0.066,0,Math.PI*2);x.fill();
+  x.strokeStyle='#ffcc00';x.lineWidth=s*0.016;
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;x.beginPath();x.moveTo(s*0.32+Math.cos(a)*s*0.09,r+Math.sin(a)*s*0.09);x.lineTo(s*0.32+Math.cos(a)*s*0.13,r+Math.sin(a)*s*0.13);x.stroke();}
+  x.strokeStyle='#e0f7fa';x.lineWidth=s*0.018;
+  for(let i=0;i<3;i++){const a=i*Math.PI/3;x.beginPath();x.moveTo(s*0.68-Math.cos(a)*s*0.11,r-Math.sin(a)*s*0.11);x.lineTo(s*0.68+Math.cos(a)*s*0.11,r+Math.sin(a)*s*0.11);x.stroke();}
+  return c.toDataURL('image/png');
+}
+document.getElementById('i512').src=draw(512);
+document.getElementById('i192').src=draw(192);
+</script>
+</body>
+</html>
