@@ -174,5 +174,6 @@ ax.beginPath();ax.strokeStyle='#00e5ff';wH.forEach((v,idx)=>{const px=cx-60+(idx
 if(sm>10){const r=70+sm*1.3,g=ax.createRadialGradient(cx,cy,5,cx,cy,r);g.addColorStop(0,'rgba(255,255,255,.88)');g.addColorStop(.4,'rgba(255,204,0,.65)');g.addColorStop(1,'rgba(255,0,0,0)');ax.fillStyle=g;ax.beginPath();ax.arc(cx,cy,r,0,Math.PI*2);ax.fill();}
 }lp();};
 </script>
+  <script>if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');</script>
 </body>
 </html>
