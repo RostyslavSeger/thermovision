@@ -68,11 +68,12 @@ document.getElementById('rep-btn').onclick=()=>{
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='ThermoVision-Bericht.html';a.click();
 };
 
-function ironColor(v){
-  if(v<64)return[v*1.5,0,v*2.5];
-  if(v<128)return[96+(v-64)*2.4,0,160-(v-64)*2];
-  if(v<192)return[255,(v-128)*3.2,0];
-  return[255,205+(v-192)*0.8,(v-192)*4];
+function paintIron(out, i, v){
+  if(v<64){out.data[i]=v*1.5;out.data[i+1]=0;out.data[i+2]=v*2.5;}
+  else if(v<128){out.data[i]=96+(v-64)*2.4;out.data[i+1]=0;out.data[i+2]=160-(v-64)*2;}
+  else if(v<192){out.data[i]=255;out.data[i+1]=(v-128)*3.2;out.data[i+2]=0;}
+  else{out.data[i]=255;out.data[i+1]=205+(v-192)*0.8;out.data[i+2]=(v-192)*4;}
+  out.data[i+3]=255;
 }
 
 document.getElementById('go').onclick=async()=>{
@@ -101,8 +102,8 @@ document.getElementById('go').onclick=async()=>{
         const out=thX.createImageData(96,96);
         for(let i=0;i<im.length;i+=4){
           const lum=im[i]*0.299+im[i+1]*0.587+im[i+2]*0.114;
-          const rgb=(pal==='IRON')?ironColor(lum):[lum,255-Math.abs(lum-128)*2,255-lum];
-          out.data[i]=rgb[0];out.data[i+1]=rgb[1];out.data[i+2]=rgb[2];out.data[i+3]=255;
+          if(pal==='IRON'){paintIron(out,i,lum);}
+          else{out.data[i]=lum;out.data[i+1]=255-Math.abs(lum-128)*2;out.data[i+2]=255-lum;out.data[i+3]=255;}
         }
         thX.putImageData(out,0,0);ax.drawImage(thC,0,0,ar.width,ar.height);
       }else{ax.drawImage(vid,0,0,ar.width,ar.height)}
