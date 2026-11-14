@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -6,16 +7,16 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:sans-serif;}
 body{background:#06080f;color:#fff;overflow:hidden;}
-#s0{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at top,#1c0b33,#06080f);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:14px;}
+#s0{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at top,#1c0b33,#06080f);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:12px;}
 .tag{font-size:10px;font-weight:bold;color:#ff9500;background:rgba(255,149,0,.15);padding:5px 12px;border-radius:12px;border:1px solid #ff9500;}
 .logo{font-size:28px;font-weight:900;}.logo span{color:#ff3b30;}
 .sub{font-size:13px;color:#cbd5e1;max-width:290px;}
 .langs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;max-width:300px;}
-.lb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:10px;border-radius:8px;font-weight:bold;}
+.lb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:9px;border-radius:8px;font-weight:bold;}
 .lb.on{background:linear-gradient(90deg,#ff3b30,#ff9500);border-color:#ffcc00;}
-#go{background:linear-gradient(90deg,#ff3b30,#ff9500);color:#fff;border:none;padding:16px 28px;border-radius:14px;font-size:15px;font-weight:bold;}
+#go{background:linear-gradient(90deg,#ff3b30,#ff9500);color:#fff;border:none;padding:15px 28px;border-radius:14px;font-size:15px;font-weight:bold;}
 #main{position:fixed;inset:0;display:none;flex-direction:column;}
-.tab{flex:1;position:relative;overflow-y:auto;display:none;padding-bottom:58px;}.tab.act{display:block;}
+.tab{flex:1;position:relative;overflow-y:auto;display:none;padding-bottom:60px;}.tab.act{display:block;}
 #v{position:fixed;width:2px;height:2px;opacity:0.01;pointer-events:none;}#ar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
   .hud{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;padding-bottom:56px;}
 .top{pointer-events:auto;display:flex;justify-content:space-between;align-items:center;padding:8px;background:rgba(0,0,0,.82);gap:3px;}
@@ -27,22 +28,23 @@ body{background:#06080f;color:#fff;overflow:hidden;}
 #snap{width:48px;height:48px;border-radius:50%;background:#fff;border:3px solid #ff9500;color:#000;font-weight:900;font-size:10px;flex-shrink:0;}
 .gd{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;text-align:center;flex:1;background:rgba(255,255,255,.06);padding:6px;border-radius:10px;}
 .gd small{display:block;font-size:8px;color:#94a3b8;}.gd b{font-size:13px;color:#ffcc00;}
-.card{background:#111625;border:1px solid #1e293b;border-radius:14px;padding:14px;margin:10px;display:flex;flex-direction:column;gap:9px;}
+.card{background:#111625;border:1px solid #1e293b;border-radius:14px;padding:12px;margin:10px;display:flex;flex-direction:column;gap:8px;}
 .card h3{font-size:14px;color:#ff9500;display:flex;justify-content:space-between;align-items:center;}
 .row{display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:8px;}
 .row select,.row input{background:#1e293b;color:#fff;border:1px solid #334155;padding:6px;border-radius:8px;width:125px;text-align:right;}
 .chk{display:flex;align-items:center;gap:8px;font-size:12px;color:#cbd5e1;}.chk input{width:16px;height:16px;}
-.rbox{background:rgba(255,149,0,.12);border:1px solid #ff9500;border-radius:10px;padding:10px;text-align:center;}.rbox b{font-size:20px;color:#ffcc00;display:block;}
-.grade{display:inline-block;padding:3px 10px;border-radius:6px;font-weight:900;font-size:14px;background:#ff3b30;color:#fff;}
-.nav{position:fixed;bottom:0;left:0;right:0;height:54px;background:#0b0e17;border-top:1px solid #1e293b;display:grid;grid-template-columns:repeat(3,1fr);z-index:40;}
-.nb{background:none;border:none;color:#64748b;font-size:11px;font-weight:bold;}.nb.on{color:#ff9500;background:rgba(255,149,0,.1);}
+.rbox{background:rgba(255,149,0,.12);border:1px solid #ff9500;border-radius:10px;padding:10px;text-align:center;}.rbox b{font-size:19px;color:#ffcc00;display:block;}
+.grade{display:inline-block;padding:2px 9px;border-radius:6px;font-weight:900;font-size:13px;background:#ff3b30;color:#fff;}
+.nav{position:fixed;bottom:0;left:0;right:0;height:54px;background:#0b0e17;border-top:1px solid #1e293b;display:grid;grid-template-columns:repeat(4,1fr);z-index:40;}
+.nb{background:none;border:none;color:#64748b;font-size:10px;font-weight:bold;}.nb.on{color:#ff9500;background:rgba(255,149,0,.1);}
 #mod{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:20px;}
 .mbox{background:#111625;border:1px solid #ff9500;border-radius:14px;padding:16px;max-width:340px;font-size:12px;line-height:1.5;display:flex;flex-direction:column;gap:10px;white-space:pre-line;max-height:75vh;overflow-y:auto;}
+.item{background:#1e293b;padding:8px;border-radius:8px;font-size:11px;display:flex;justify-content:space-between;align-items:center;}
 </style>
 </head>
 <body>
 <div id="s0">
-  <div class="tag">THERMAL & ENERGY AUDIT PRO</div>
+  <div class="tag">COMMERCIAL BUILDING AUDIT SUITE</div>
   <div class="logo">THERMOVISION <span>PRO</span></div>
   <div class="sub" id="ts">Wärmebild-, Luftstrom- & Energie-Audit</div>
   <div class="langs">
@@ -58,10 +60,10 @@ body{background:#06080f;color:#fff;overflow:hidden;}
   <div id="t1" class="tab act">
     <video id="v" autoplay playsinline muted></video><canvas id="ar"></canvas>
     <div class="hud">
-      <div class="top"><button class="bs" id="home-btn">MENU</button><button class="bs" id="pal-btn">FLIR: IRON</button><button class="bs" id="md-btn">OPTICAL</button><button class="bs" id="lmp-btn">LAMP</button><button class="bs" id="cal-btn">CAL</button><button class="bs" id="inf-btn">INFO</button></div>
+      <div class="top"><button class="bs" id="home-btn">MENU</button><button class="bs" id="pal-btn">FLIR: IRON</button><button class="bs" id="md-btn">HYBRID</button><button class="bs" id="lmp-btn">LAMP</button><button class="bs" id="cal-btn">CAL</button><button class="bs" id="inf-btn">INFO</button></div>
       <div id="pill">KAMERA AUF FENSTER RICHTEN</div>
       <div class="bot">
-        <div class="srow"><span>SENS:</span><input type="range" id="sr" min="1" max="15" value="4"><span id="sv">4</span></div>
+        <div class="srow"><span>SENS:</span><input type="range" id="sr" min="1" max="15" value="2"><span id="sv">2</span></div>
         <div class="brow"><button id="snap">FOTO</button><div class="gd"><div><small id="l1">LECK</small><b id="v1">0%</b></div><div><small id="l2">STROM</small><b id="v2">0.0 m/s</b></div><div><small id="l3">DICHT</small><b id="v3">100%</b></div></div></div>
       </div>
     </div>
@@ -69,14 +71,16 @@ body{background:#06080f;color:#fff;overflow:hidden;}
   <div id="t2" class="tab">
     <div class="card">
       <h3><span>FENSTER AUDIT (DIN/GEG)</span><button class="bs" id="gps-btn">GPS AUTO</button></h3>
+      <div class="row"><span>Raum / Fenster:</span><input type="text" id="r-name" value="Wohnzimmer 1"></div>
       <div class="row"><span>Verglasung:</span><select id="uw"><option value="5.0">Einfachglas (5.0)</option><option value="2.8" selected>Doppelglas alt (2.8)</option><option value="1.3">Isolierglas (1.3)</option><option value="0.8">Passivhaus 3-fach (0.8)</option></select></div>
       <div class="row"><span>Fläche (m²):</span><input type="number" id="am" value="1.8" step="0.1"></div>
       <div class="row"><span>Innen (°C):</span><input type="number" id="ti" value="20"></div>
       <div class="row"><span>Außen (°C):</span><input type="number" id="to" value="5"></div>
       <div class="row"><span>Preis (€/kWh):</span><input type="number" id="pr" value="0.14" step="0.01"></div>
-      <label class="chk"><input type="checkbox" id="c1"> Blatt-Test: Papier rutscht durch</label>
-      <label class="chk"><input type="checkbox" id="c2"> Kondenswasser / Zugluft an Kante</label>
+      <label class="chk"><input type="checkbox" id="c1"> Blatt-Test: Papier rutscht durch Dichtung</label>
+      <label class="chk"><input type="checkbox" id="c2"> Kondenswasser / Zugluft an Rahmenkante</label>
       <div class="rbox"><div style="margin-bottom:4px">Klasse: <span class="grade" id="grd">E</span></div><b id="eres">0 € / Jahr</b><span id="kres" style="font-size:11px;color:#cbd5e1">0 kWh</span><div id="sav-txt" style="font-size:11px;color:#32d74b;margin-top:4px"></div></div>
+      <button id="add-btn" style="background:#32d74b;color:#000;border:none;padding:11px;border-radius:10px;font-weight:bold">+ IN PROTOKOLL SPEICHERN</button>
     </div>
   </div>
   <div id="t3" class="tab">
@@ -86,10 +90,17 @@ body{background:#06080f;color:#fff;overflow:hidden;}
       <div class="row"><span>Luftfeuchte (%):</span><input type="number" id="dh" value="62"></div>
       <div class="row"><span>Wand/Ecke (°C):</span><input type="number" id="dw" value="12.5" step="0.5"></div>
       <div class="rbox"><small>TAUPUNKT</small><b id="dval">11.6 °C</b><span id="dst" style="font-size:12px;font-weight:bold">OK</span></div>
-      <button id="rep-btn" style="background:#ff9500;color:#000;border:none;padding:12px;border-radius:10px;font-weight:bold">BERICHT (HTML)</button>
+      <div id="tip-box" style="font-size:11px;color:#cbd5e1;background:#1e293b;padding:9px;border-radius:8px"></div>
     </div>
   </div>
-  <div class="nav"><button class="nb on" data-t="t1">AR SCANNER</button><button class="nb" data-t="t2">AUDIT €</button><button class="nb" data-t="t3">SCHIMMEL</button></div>
+  <div id="t4" class="tab">
+    <div class="card">
+      <h3><span>WOHNUNGS-PROTOKOLL</span><span id="tot-eur" style="color:#ffcc00">0 €</span></h3>
+      <div id="log-list" style="display:flex;flex-direction:column;gap:6px"></div>
+      <button id="rep-btn" style="background:#ff9500;color:#000;border:none;padding:12px;border-radius:10px;font-weight:bold">GESAMTBERICHT EXPORT (HTML)</button>
+    </div>
+  </div>
+  <div class="nav"><button class="nb on" data-t="t1">SCANNER</button><button class="nb" data-t="t2">AUDIT €</button><button class="nb" data-t="t3">SCHIMMEL</button><button class="nb" data-t="t4">BERICHT</button></div>
 </div>
 <div id="mod"><div class="mbox"><div id="mtxt"></div><button id="mcls" style="background:#ff9500;border:none;padding:10px;border-radius:8px;font-weight:bold">OK</button></div></div>
 <script>
@@ -104,7 +115,7 @@ fr:{s:"Audit thermique et énergie",b:"LANCER SCANNER",sc:"POINTEZ LA FENÊTRE",
 es:{s:"Auditoría térmica y energía",b:"INICIAR ESCÁNER",sc:"APUNTE A LA VENTANA",lk:"¡FLUJO DE AIRE!",ok:"SIN CORRIENTES",l1:"FUGA",l2:"FLUJO",l3:"NORMAL",leg:"AVISO LEGAL:\n1. Sin sensor IR: Indicador óptico-acústico.\n2. Sin responsabilidad: Valores orientativos. Sin responsabilidad por daños o moho.\n3. Privacidad (RGPD): Procesamiento 100% local."},
 nl:{s:"Thermische & energie-audit",b:"START SCANNER",sc:"RICHT OP HET RAAM",lk:"LUCHTSTROOM!",ok:"GEEN TOCHT",l1:"LEK",l2:"STROOM",l3:"DICHT",leg:"DISCLAIMER:\n1. Geen IR-sensor: Optisch-akoestische indicator.\n2. Geen aansprakelijkheid: Indicatieve waarden. Geen aansprakelijkheid voor schade of schimmel.\n3. Privacy (AVG): 100% lokale verwerking."}
 };
-  let L='de',mode='OPTICAL',pal='IRON',baseN=35,sens=4,wH=new Array(40).fill(0),st=false,torch=false;
+  let L='de',mode='HYBRID',pal='IRON',baseN=35,sens=2,wH=new Array(40).fill(0),st=false,torch=false,logs=[];
 const $=id=>document.getElementById(id);
 function showM(t){$('mtxt').textContent=t;$('mod').style.display='flex';}
 $('mcls').onclick=()=>$('mod').style.display='none';
@@ -114,19 +125,22 @@ function setL(c){if(!D[c])return;L=c;const d=D[c];$('ts').textContent=d.s;$('go'
 document.querySelectorAll('.lb').forEach(b=>b.onclick=()=>setL(b.dataset.l));
 $('sr').oninput=function(){sens=+this.value;$('sv').textContent=sens;};
 document.querySelectorAll('.nb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('act'));b.classList.add('on');$(b.dataset.t).classList.add('act');});
-function cA(){let u=+$('uw').value||2.8;if($('c1').checked)u+=.4;if($('c2').checked)u+=.5;const a=+$('am').value||1.8,ti=+$('ti').value||20,to=+$('to').value||5,pr=+$('pr').value||.14,k=Math.round(u*a*Math.max(0,ti-to)*4.32),e=k*pr,sv=Math.max(0,e-(Math.round(.8*a*Math.max(0,ti-to)*4.32)*pr));$('eres').textContent=e.toFixed(1)+' € / Jahr';$('kres').textContent=k+' kWh';$('sav-txt').textContent='Ersparnis 3-fach: +'+sv.toFixed(0)+' €';const g=$('grd');if(u<=.9){g.textContent='A+';g.style.background='#32d74b';}else if(u<=1.4){g.textContent='B';g.style.background='#84cc16';}else if(u<=2.8){g.textContent='E';g.style.background='#ff9500';}else{g.textContent='G';g.style.background='#ff3b30';}}
+let curEur=0,curKwh=0;
+function cA(){let u=+$('uw').value||2.8;if($('c1').checked)u+=.4;if($('c2').checked)u+=.5;const a=+$('am').value||1.8,ti=+$('ti').value||20,to=+$('to').value||5,pr=+$('pr').value||.14;curKwh=Math.round(u*a*Math.max(0,ti-to)*4.32);curEur=curKwh*pr;const sv=Math.max(0,curEur-(Math.round(.8*a*Math.max(0,ti-to)*4.32)*pr));$('eres').textContent=curEur.toFixed(1)+' € / Jahr';$('kres').textContent=curKwh+' kWh';$('sav-txt').textContent='Ersparnis 3-fach: +'+sv.toFixed(0)+' € / Jahr';const g=$('grd');if(u<=.9){g.textContent='A+';g.style.background='#32d74b';}else if(u<=1.4){g.textContent='B';g.style.background='#84cc16';}else if(u<=2.8){g.textContent='E';g.style.background='#ff9500';}else{g.textContent='G';g.style.background='#ff3b30';}}
 ['uw','am','ti','to','pr','c1','c2'].forEach(i=>$(i).oninput=cA);cA();
-function cD(){const t=+$('dt').value||19,h=Math.min(100,Math.max(1,+$('dh').value||60)),w=+$('dw').value||12,al=((17.27*t)/(237.7+t))+Math.log(h/100),dp=(237.7*al)/(17.27-al);$('dval').textContent=dp.toFixed(1)+' °C';const s=$('dst');if(w<=dp+.5){s.textContent='SCHIMMEL-GEFAHR!';s.style.color='#ff3b30';}else if(w<=dp+2.5){s.textContent='WARNUNG';s.style.color='#ffcc00';}else{s.textContent='SICHER';s.style.color='#32d74b';}}
+function cD(){const t=+$('dt').value||19,h=Math.min(100,Math.max(1,+$('dh').value||60)),w=+$('dw').value||12,al=((17.27*t)/(237.7+t))+Math.log(h/100),dp=(237.7*al)/(17.27-al);$('dval').textContent=dp.toFixed(1)+' °C';const s=$('dst'),tp=$('tip-box');if(w<=dp+.5){s.textContent='SCHIMMEL-GEFAHR!';s.style.color='#ff3b30';tp.textContent='Empfehlung: 3x täglich 5 Min. Stoßlüften + Dichtung prüfen (ROI ~2 Mon.).';}else if(w<=dp+2.5){s.textContent='WARNUNG';s.style.color='#ffcc00';tp.textContent='Empfehlung: Luftfeuchte unter 55% halten, Möbel 10cm von Außenwand abrücken.';}else{s.textContent='SICHER';s.style.color='#32d74b';tp.textContent='Optimal: Kein Kondensat-Risiko an dieser Oberfläche.';}}
 ['dt','dh','dw'].forEach(i=>$(i).oninput=cD);cD();
+$('add-btn').onclick=()=>{logs.push({n:$('r-name').value||'Raum',e:curEur,k:curKwh,g:$('grd').textContent,dp:$('dval').textContent});renderLogs();showM('Gespeichert: '+$('r-name').value);};
+function renderLogs(){const box=$('log-list');box.innerHTML='';let sum=0;logs.forEach((x,idx)=>{sum+=x.e;const el=document.createElement('div');el.className='item';el.innerHTML='<span><b>'+x.n+'</b> (Kl. '+x.g+')</span><span>'+x.e.toFixed(1)+' €</span>';box.appendChild(el);});$('tot-eur').textContent=sum.toFixed(1)+' € / J';}
 $('gps-btn').onclick=function(){const b=this;b.textContent='...';navigator.geolocation.getCurrentPosition(async p=>{try{const r=await fetch('https://open-meteo.com'),j=await r.json();$('to').value=j.current.temperature_2m;$('dh').value=j.current.relative_humidity_2m;cA();cD();b.textContent=j.current.temperature_2m+'°C';}catch(e){b.textContent='ERR';}},()=>b.textContent='NO GPS');};
-$('rep-btn').onclick=()=>{const h='<html><body style="font-family:sans-serif;padding:20px"><h2>ThermoVision PRO</h2><p>'+new Date().toLocaleString()+'</p><p>Verlust: '+$('eres').textContent+' ('+$('grd').textContent+')</p><p>Taupunkt: '+$('dval').textContent+' - '+$('dst').textContent+'</p></body></html>';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([h],{type:'text/html'}));a.download='Bericht.html';a.click();};
-function pIron(o,i,v){if(v<64){o.data[i]=v*1.5;o.data[i+1]=0;o.data[i+2]=v*2.5;}else if(v<128){o.data[i]=96+(v-64)*2.4;o.data[i+1]=0;o.data[i+2]=160-(v-64)*2;}else if(v<192){o.data[i]=255;o.data[i+1]=(v-128)*3.2;o.data[i+2]=0;}else{o.data[i]=255;o.data[i+1]=205+(v-192)*.8;o.data[i+2]=(v-192)*4;}o.data[i+3]=255;}
+$('rep-btn').onclick=()=>{let rows=logs.map(x=>'<tr><td>'+x.n+'</td><td>'+x.g+'</td><td>'+x.k+' kWh</td><td>'+x.e.toFixed(1)+' €</td></tr>').join('');if(!rows)rows='<tr><td>'+$('r-name').value+'</td><td>'+$('grd').textContent+'</td><td>'+curKwh+' kWh</td><td>'+curEur.toFixed(1)+' €</td></tr>';const h='<html><body style="font-family:sans-serif;padding:24px"><h2>ThermoVision PRO - Energie & Gebäudeaudit</h2><p>Datum: '+new Date().toLocaleString()+'</p><table border="1" cellpadding="8" cellspacing="0" style="width:100%;border-collapse:collapse"><tr><th>Raum</th><th>Klasse</th><th>Verlust</th><th>Kosten/Jahr</th></tr>'+rows+'</table><p><b>Taupunkt aktuell:</b> '+$('dval').textContent+' ('+$('dst').textContent+')</p><p style="font-size:11px;color:#666">DSGVO-konformes Audit-Protokoll.</p></body></html>';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([h],{type:'text/html'}));a.download='Gebaeude-Audit.html';a.click();};
+  function pIron(o,i,v){if(v<64){o.data[i]=v*1.5;o.data[i+1]=0;o.data[i+2]=v*2.5;}else if(v<128){o.data[i]=96+(v-64)*2.4;o.data[i+1]=0;o.data[i+2]=160-(v-64)*2;}else if(v<192){o.data[i]=255;o.data[i+1]=(v-128)*3.2;o.data[i+2]=0;}else{o.data[i]=255;o.data[i+1]=205+(v-192)*.8;o.data[i+2]=(v-192)*4;}o.data[i+3]=255;}
 $('go').onclick=async()=>{
 $('s0').style.display='none';$('main').style.display='flex';if(st)return;st=true;
 const vid=$('v'),ar=$('ar'),ax=ar.getContext('2d');let an=null,dt=null,bW=23.4,pF=null,cL=0,sm=0,vTrack=null;
 $('pal-btn').onclick=function(){pal=pal==='IRON'?'RAINBOW':(pal==='RAINBOW'?'OFF':'IRON');this.textContent='FLIR: '+pal;};
-$('md-btn').onclick=function(){mode=mode==='OPTICAL'?'AIRFLOW':'OPTICAL';this.textContent=mode;};
-$('cal-btn').onclick=function(){baseN=cL+4;this.textContent='CAL ('+Math.round(baseN)+')';};
+$('md-btn').onclick=function(){mode=mode==='HYBRID'?'MIC ONLY':'HYBRID';this.textContent=mode;};
+$('cal-btn').onclick=function(){baseN=cL+2;this.textContent='CAL ('+Math.round(baseN)+')';};
 $('lmp-btn').onclick=async function(){if(!vTrack)return;torch=!torch;try{await vTrack.applyConstraints({advanced:[{torch:torch}]});this.style.borderColor=torch?'#ffcc00':'#475569';}catch(e){}};
 try{const vs=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});vid.srcObject=vs;vTrack=vs.getVideoTracks().shift();await vid.play();}catch(e){showM('Camera Error: '+e.message);}
 try{const aS=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}),cx=new(window.AudioContext||window.webkitAudioContext)();if(cx.state==='suspended')await cx.resume();const sr=cx.createMediaStreamSource(aS);an=cx.createAnalyser();an.fftSize=2048;sr.connect(an);dt=new Uint8Array(an.frequencyBinCount);bW=cx.sampleRate/an.fftSize;}catch(e){}
@@ -135,15 +149,16 @@ const thC=document.createElement('canvas');thC.width=96;thC.height=96;const thX=
 $('snap').onclick=()=>{const a=document.createElement('a');a.download='ThermoVision-'+Date.now()+'.png';a.href=ar.toDataURL();a.click();};
 function lp(){
 requestAnimationFrame(lp);if($('main').style.display==='none')return;
-ar.width=innerWidth;ar.height=innerHeight;const cx=ar.width/2,cy=ar.height/2;let rw=0,cLum=0,bLum=0;
-if(vid.readyState>=2){ox.drawImage(vid,0,0,96,96);const im=ox.getImageData(0,0,96,96).data;let mn=255,mx=0;for(let i=0;i<im.length;i+=4){const l=im[i]*.299+im[i+1]*.587+im[i+2]*.114;if(l<mn)mn=l;if(l>mx)mx=l;}const rng=Math.max(25,mx-mn);if(pal!=='OFF'){const out=thX.createImageData(96,96);for(let i=0;i<im.length;i+=4){const rawL=im[i]*.299+im[i+1]*.587+im[i+2]*.114;const lum=Math.min(255,Math.max(0,((rawL-mn)/rng)*255));if(pal==='IRON')pIron(out,i,lum);else{out.data[i]=lum;out.data[i+1]=255-Math.abs(lum-128)*2;out.data[i+2]=255-lum;out.data[i+3]=255;}}thX.putImageData(out,0,0);ax.drawImage(thC,0,0,ar.width,ar.height);}else{ax.drawImage(vid,0,0,ar.width,ar.height);}let cD=0,bD=0;for(let y=0;y<96;y++)for(let x=0;x<96;x++){const i=(y*96+x)*4,lum=im[i]*.3+im[i+1]*.6+im[i+2]*.1;if(x>=34&&x<=62&&y>=34&&y<=62){cLum+=lum;if(pF)cD+=Math.abs(im[i]-pF[i])+Math.abs(im[i+1]-pF[i+1]);}else{bLum+=lum;if(pF)bD+=Math.abs(im[i]-pF[i])+Math.abs(im[i+1]-pF[i+1]);}}if(mode==='OPTICAL'&&pF)rw=Math.min(100,Math.round(Math.max(0,(cD/841)-((bD/8375)*1.5)-sens)*4.5));pF=new Uint8ClampedArray(im);}
-if(mode==='AIRFLOW'&&an){an.getByteFrequencyData(dt);const b1=Math.max(1,Math.floor(20/bW)),b2=Math.floor(220/bW),b3=Math.floor(3000/bW);let lS=0,mS=0;for(let i=b1;i<=b2;i++)lS+=dt[i];for(let i=b2+1;i<=b3;i++)mS+=dt[i];cL=lS/(b2-b1+1);if(cL>baseN&&(cL/((mS/(b3-b2))||1))>1.35)rw=Math.min(100,Math.round((cL-baseN)*3));}
-sm=Math.round(sm*.75+rw*.25);wH.push(sm);wH.shift();
-const d=D[L],pl=$('pill');$('v1').textContent=sm+'%';$('v2').textContent=(sm*.035).toFixed(2)+' m/s';$('v3').textContent=(100-sm)+'%';
-ax.strokeStyle='rgba(255,255,255,.7)';ax.lineWidth=1.5;ax.strokeRect(cx-60,cy-60,120,120);
-const dT=((cLum/841)-(bLum/8375))*.08;ax.fillStyle='#ffcc00';ax.font='bold 11px sans-serif';ax.fillText('ΔT: '+(dT>=0?'+':'')+dT.toFixed(1)+'°C',cx-55,cy-66);
-ax.beginPath();ax.strokeStyle='#00e5ff';wH.forEach((v,idx)=>{const px=cx-55+(idx*2.8),py=cy+50-(v*.4);idx===0?ax.moveTo(px,py):ax.lineTo(px,py);});ax.stroke();
-if(sm>12){pl.textContent=d.lk;pl.style.color='#ffcc00';const r=65+sm*1.2,g=ax.createRadialGradient(cx,cy,5,cx,cy,r);g.addColorStop(0,'rgba(255,255,255,.85)');g.addColorStop(.4,'rgba(255,204,0,.6)');g.addColorStop(1,'rgba(255,0,0,0)');ax.fillStyle=g;ax.beginPath();ax.arc(cx,cy,r,0,Math.PI*2);ax.fill();}else{pl.textContent=d.ok;pl.style.color='#00e5ff';}
+ar.width=innerWidth;ar.height=innerHeight;const cx=ar.width/2,cy=ar.height/2;let rwCam=0,rwMic=0,cLum=0,bLum=0,coldX=48,coldY=48;
+if(vid.readyState>=2){ox.drawImage(vid,0,0,96,96);const im=ox.getImageData(0,0,96,96).data;let mn=255,mx=0;for(let y=0;y<96;y++)for(let x=0;x<96;x++){const i=(y*96+x)*4,l=im[i]*.299+im[i+1]*.587+im[i+2]*.114;if(l<mn){mn=l;coldX=x;coldY=y;}if(l>mx)mx=l;}const rng=Math.max(25,mx-mn);if(pal!=='OFF'){const out=thX.createImageData(96,96);for(let i=0;i<im.length;i+=4){const rawL=im[i]*.299+im[i+1]*.587+im[i+2]*.114;const lum=Math.min(255,Math.max(0,((rawL-mn)/rng)*255));if(pal==='IRON')pIron(out,i,lum);else{out.data[i]=lum;out.data[i+1]=255-Math.abs(lum-128)*2;out.data[i+2]=255-lum;out.data[i+3]=255;}}thX.putImageData(out,0,0);ax.drawImage(thC,0,0,ar.width,ar.height);}else{ax.drawImage(vid,0,0,ar.width,ar.height);}let cD=0,bD=0;for(let y=0;y<96;y++)for(let x=0;x<96;x++){const i=(y*96+x)*4,lum=im[i]*.3+im[i+1]*.6+im[i+2]*.1;if(x>=30&&x<=66&&y>=30&&y<=66){cLum+=lum;if(pF)cD+=Math.abs(im[i]-pF[i])+Math.abs(im[i+1]-pF[i+1]);}else{bLum+=lum;if(pF)bD+=Math.abs(im[i]-pF[i])+Math.abs(im[i+1]-pF[i+1]);}}if(pF)rwCam=Math.min(100,Math.round(Math.max(0,(cD/1369)-((bD/7847)*1.2)-(sens*0.4))*12));pF=new Uint8ClampedArray(im);const sx=(coldX/96)*ar.width,sy=(coldY/96)*ar.height;ax.strokeStyle='#00e5ff';ax.lineWidth=2;ax.beginPath();ax.arc(sx,sy,14,0,Math.PI*2);ax.stroke();ax.fillStyle='#00e5ff';ax.font='bold 9px sans-serif';ax.fillText('COLD SPOT',sx+16,sy+3);}
+if(an){an.getByteFrequencyData(dt);const b1=Math.max(1,Math.floor(15/bW)),b2=Math.floor(250/bW),b3=Math.floor(3000/bW);let lS=0,mS=0;for(let i=b1;i<=b2;i++)lS+=dt[i];for(let i=b2+1;i<=b3;i++)mS+=dt[i];cL=lS/(b2-b1+1);const thr=baseN+(sens*0.8);if(cL>thr&&(cL/((mS/(b3-b2))||1))>1.15)rwMic=Math.min(100,Math.round((cL-thr)*6));}
+const rw=(mode==='HYBRID')?Math.max(rwCam,rwMic):rwMic;
+sm=Math.round(sm*.65+rw*.35);wH.push(sm);wH.shift();
+const d=D[L],pl=$('pill');$('v1').textContent=sm+'%';$('v2').textContent=(sm*.04).toFixed(2)+' m/s';$('v3').textContent=(100-sm)+'%';
+ax.strokeStyle='rgba(255,255,255,.7)';ax.lineWidth=1.5;ax.strokeRect(cx-65,cy-65,130,130);
+const dT=((cLum/1369)-(bLum/7847))*.08;ax.fillStyle='#ffcc00';ax.font='bold 11px sans-serif';ax.fillText('ΔT: '+(dT>=0?'+':'')+dT.toFixed(1)+'°C',cx-60,cy-71);
+ax.beginPath();ax.strokeStyle='#00e5ff';wH.forEach((v,idx)=>{const px=cx-60+(idx*3.0),py=cy+55-(v*.45);idx===0?ax.moveTo(px,py):ax.lineTo(px,py);});ax.stroke();
+if(sm>10){pl.textContent=d.lk;pl.style.color='#ffcc00';const r=70+sm*1.3,g=ax.createRadialGradient(cx,cy,5,cx,cy,r);g.addColorStop(0,'rgba(255,255,255,.88)');g.addColorStop(.4,'rgba(255,204,0,.65)');g.addColorStop(1,'rgba(255,0,0,0)');ax.fillStyle=g;ax.beginPath();ax.arc(cx,cy,r,0,Math.PI*2);ax.fill();}else{pl.textContent=d.ok;pl.style.color='#00e5ff';}
 }lp();};
 </script>
 </body>
