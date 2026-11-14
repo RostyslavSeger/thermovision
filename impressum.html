@@ -5,46 +5,71 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Impressum & Datenschutz - ThermoVision PRO</title>
 <style>
-body{background:#05070e;color:#e2e8f0;font-family:sans-serif;line-height:1.6;padding:20px;max-width:720px;margin:0 auto;}
-h1,h2{color:#ff9500;margin-top:20px;margin-bottom:8px;}
-h1{font-size:22px;}h2{font-size:16px;}
+body{background:#05070e;color:#e2e8f0;font-family:sans-serif;line-height:1.6;padding:16px;max-width:720px;margin:0 auto;}
+h1,h2{color:#ff9500;margin-top:16px;margin-bottom:8px;}
+h1{font-size:20px;}h2{font-size:15px;}
 p{margin-bottom:10px;font-size:13px;}
-.card{background:#111625;border:1px solid #1e293b;border-radius:12px;padding:16px;margin-bottom:16px;}
-.btn{display:inline-block;background:#ff9500;color:#000;text-decoration:none;padding:10px 16px;border-radius:8px;font-weight:bold;font-size:13px;margin-bottom:16px;}
+.card{background:#111625;border:1px solid #1e293b;border-radius:12px;padding:14px;margin-bottom:14px;}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.btn{background:#ff9500;color:#000;text-decoration:none;padding:8px 14px;border-radius:8px;font-weight:bold;font-size:12px;}
+.langs{display:flex;gap:4px;flex-wrap:wrap;}
+.lb{background:#1e293b;color:#fff;border:1px solid #475569;padding:5px 8px;border-radius:6px;font-size:11px;font-weight:bold;}
+.lb.on{background:#ff9500;color:#000;border-color:#ffcc00;}
 </style>
 </head>
 <body>
-<a href="index.html" class="btn">← Zurück zur App (ThermoVision PRO)</a>
-<h1>Impressum</h1>
+<div class="top">
+  <a href="index.html" class="btn" id="bk">← Zurück zur App</a>
+  <div class="langs">
+    <button class="lb on" data-l="de">DE</button><button class="lb" data-l="en">EN</button>
+    <button class="lb" data-l="ru">RU</button><button class="lb" data-l="ua">UA</button>
+    <button class="lb" data-l="pl">PL</button><button class="lb" data-l="fr">FR</button>
+    <button class="lb" data-l="es">ES</button><button class="lb" data-l="nl">NL</button>
+  </div>
+</div>
+<h1 id="t1">Impressum</h1>
 <div class="card">
-  <h2>Angaben gemäß § 5 DDG</h2>
+  <h2 id="h1">Angaben gemäß § 5 DDG</h2>
   <p><b>Rostyslav Zeger</b><br>
   Mittlere Marktgasse 5<br>
   D-91578 Leutershausen<br>
-  Deutschland</p>
-  <h2>Kontakt</h2>
+  Deutschland / Germany</p>
+  <h2 id="h2">Kontakt</h2>
   <p>E-Mail: <b id="em"></b><br>
-  <span style="color:#94a3b8;font-size:12px">Elektronische Kontaktaufnahme: Bearbeitung von Anfragen in der Regel innerhalb von 60 Minuten.</span></p>
-  <script>document.getElementById('em').textContent='rostyslav'+'\u0040'+'web.de';</script>
+  <span id="c1" style="color:#94a3b8;font-size:12px">Elektronische Kontaktaufnahme: Bearbeitung von Anfragen in der Regel innerhalb von 60 Minuten.</span></p>
 </div>
 <div class="card">
-  <h2>Haftungsausschluss & Technischer Hinweis</h2>
-  <p>Die Anwendung „ThermoVision PRO“ nutzt mathematisch-physikalische Algorithmen (Optical Flow, akustische Spektralanalyse 15–250 Hz sowie bauphysikalische Berechnungen nach DIN/GEG) zur optisch-akustischen Indikation. Da handelsübliche Smartphones über keinen physischen Infrarot-Wärmebildsensor verfügen, stellen alle angezeigten Messwerte unverbindliche Orientierungswerte dar und ersetzen kein Gutachten eines zertifizierten Energieberaters. Eine Haftung für Bauschäden, Schimmelbefall oder finanzielle Verluste ist ausgeschlossen.</p>
-  <h2>Verbraucherstreitbeilegung (§ 36 VSBG)</h2>
-  <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
-  <h2>Hinweis zum Widerrufsrecht bei digitalen Inhalten (§ 356 Abs. 5 BGB)</h2>
-  <p>Beim Erwerb digitaler Lizenzschlüssel (PRO-Version) erlischt das 14-tägige Widerrufsrecht vorzeitig, sobald mit der Ausführung des Vertrags nach ausdrücklicher Zustimmung des Verbrauchers und dessen Kenntnisnahme vom Verlust des Widerrufsrechts (durch Aktivierung des Schlüssels) begonnen wurde.</p>
+  <h2 id="h3">Haftungsausschluss & Technischer Hinweis</h2>
+  <p id="p1"></p>
+  <h2 id="h4">Verbraucherstreitbeilegung (§ 36 VSBG)</h2>
+  <p id="p2"></p>
+  <h2 id="h5">Widerrufsrecht bei digitalen Inhalten (§ 356 Abs. 5 BGB)</h2>
+  <p id="p3"></p>
 </div>
-<h1>Datenschutzerklärung (DSGVO / GDPR)</h1>
+<h1 id="t2">Datenschutzerklärung (DSGVO / GDPR)</h1>
 <div class="card">
-  <h2>1. Grundsatz der lokalen Datenverarbeitung</h2>
-  <p>Die App „ThermoVision PRO“ verarbeitet Kamera-Bilddaten, Mikrofon-Frequenzdaten sowie GPS-Standortdaten ausschließlich lokal in Echtzeit im Arbeitsspeicher Ihres Endgeräts (Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO). Es findet keinerlei Speicherung, Aufzeichnung oder Übertragung dieser Sensordaten an den Entwickler oder Dritte statt.</p>
-  <h2>2. Hosting (GitHub Pages)</h2>
-  <p>Diese Web-Anwendung wird über GitHub Pages (GitHub Inc., USA) bereitgestellt. Beim Aufruf der Seite werden technisch notwendige Verbindungsdaten (IP-Adresse) zur Auslieferung der Anwendung verarbeitet (Art. 6 Abs. 1 lit. f DSGVO). GitHub ist unter dem EU-US Data Privacy Framework zertifiziert.</p>
-  <h2>3. Wetterdaten-Abruf (Open-Meteo API)</h2>
-  <p>Bei aktiver Nutzung der optionalen Funktion „GPS AUTO“ werden Ihre geografischen Koordinaten direkt von Ihrem Gerät an den Wetterdienst Open-Meteo (open-meteo.com) übermittelt, um die lokale Außentemperatur und Luftfeuchtigkeit abzurufen.</p>
-  <h2>4. Ihre Rechte nach DSGVO</h2>
-  <p>Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten sowie ein Recht auf Berichtigung, Sperrung oder Löschung dieser Daten.</p>
+  <h2 id="h6">1. Lokale Datenverarbeitung</h2>
+  <p id="p4"></p>
+  <h2 id="h7">2. Hosting (GitHub Pages) & Wetter-API</h2>
+  <p id="p5"></p>
+  <h2 id="h8">3. Ihre Rechte nach DSGVO / GDPR</h2>
+  <p id="p6"></p>
 </div>
+<script>
+document.getElementById('em').textContent='rostyslav'+'\u0040'+'web.de';
+const L={
+de:{bk:"← Zurück zur App",t1:"Impressum",h1:"Angaben gemäß § 5 DDG",h2:"Kontakt",c1:"Elektronische Kontaktaufnahme: Bearbeitung von Anfragen in der Regel innerhalb von 60 Minuten.",h3:"Haftungsausschluss & Technischer Hinweis",p1:"Die Anwendung „ThermoVision PRO“ nutzt mathematisch-physikalische Algorithmen (Optical Flow, akustische Spektralanalyse 15–250 Hz sowie bauphysikalische Berechnungen nach DIN/GEG) zur optisch-akustischen Indikation. Da handelsübliche Smartphones über keinen physischen Infrarot-Wärmebildsensor verfügen, stellen alle angezeigten Messwerte unverbindliche Orientierungswerte dar und ersetzen kein Gutachten eines zertifizierten Energieberaters. Eine Haftung für Bauschäden, Schimmelbefall oder finanzielle Verluste ist ausgeschlossen.",h4:"Verbraucherstreitbeilegung (§ 36 VSBG)",p2:"Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.",h5:"Widerrufsrecht bei digitalen Inhalten (§ 356 Abs. 5 BGB)",p3:"Beim Erwerb digitaler Lizenzschlüssel (PRO-Version) erlischt das 14-tägige Widerrufsrecht vorzeitig, sobald mit der Ausführung des Vertrags nach ausdrücklicher Zustimmung des Verbrauchers und dessen Kenntnisnahme vom Verlust des Widerrufsrechts (durch Aktivierung des Schlüssels) begonnen wurde.",t2:"Datenschutzerklärung (DSGVO / GDPR)",h6:"1. Lokale Datenverarbeitung",p4:"Die App verarbeitet Kamera-, Mikrofon- sowie GPS-Daten ausschließlich lokal in Echtzeit im Arbeitsspeicher Ihres Endgeräts (Art. 6 Abs. 1 lit. b DSGVO). Es findet keine Speicherung oder Übertragung an den Entwickler statt.",h7:"2. Hosting (GitHub Pages) & Wetter-API",p5:"Bereitstellung über GitHub Pages (GitHub Inc., USA; EU-US Data Privacy Framework, Art. 6 Abs. 1 lit. f DSGVO). Bei aktiver Nutzung von „GPS AUTO“ werden Koordinaten direkt von Ihrem Gerät an Open-Meteo (open-meteo.com) abgerufen.",h8:"3. Ihre Rechte nach DSGVO",p6:"Sie haben jederzeit das Recht auf Auskunft, Berichtigung, Sperrung oder Löschung Ihrer gespeicherten personenbezogenen Daten."},
+en:{bk:"← Back to App",t1:"Legal Notice (Impressum)",h1:"Information pursuant to § 5 DDG (Germany)",h2:"Contact",c1:"Electronic contact: Inquiries are usually answered within 60 minutes.",h3:"Disclaimer & Technical Notice",p1:"ThermoVision PRO uses mathematical-physical algorithms (Optical Flow, 15–250 Hz acoustic spectrum analysis, and DIN/GEG building physics) to approximate professional diagnostics. Since standard smartphones lack a physical infrared sensor, all readings are indicative estimates only and do not replace a certified energy auditor. Any liability for property damage, mold, or financial loss is excluded.",h4:"Consumer Dispute Resolution (§ 36 VSBG)",p2:"We are neither willing nor obliged to participate in dispute resolution proceedings before a consumer arbitration board.",h5:"Right of Withdrawal for Digital Content (§ 356 (5) BGB)",p3:"When purchasing digital license keys (PRO version), the 14-day right of withdrawal expires prematurely once execution of the contract has begun after the consumer's explicit consent and acknowledgment of losing the right of withdrawal upon key activation.",t2:"Privacy Policy (GDPR)",h6:"1. Local Data Processing",p4:"Camera, microphone, and GPS data are processed 100% locally in real time on your device (Art. 6 (1) (b) GDPR). No sensor data is stored or transmitted to the developer.",h7:"2. Hosting (GitHub Pages) & Weather API",p5:"Hosted via GitHub Pages (GitHub Inc., USA; EU-US Data Privacy Framework, Art. 6 (1) (f) GDPR). When using 'GPS AUTO', coordinates are queried directly by your device from Open-Meteo (open-meteo.com).",h8:"3. Your Rights under GDPR",p6:"You have the right to free information, correction, restriction, or deletion of your personal data at any time."},
+ru:{bk:"← Назад в приложение",t1:"Юридическая информация (Impressum)",h1:"Сведения согласно § 5 DDG (Германия)",h2:"Контакт",c1:"Электронная связь: ответы на запросы обычно предоставляются в течение 60 минут.",h3:"Отказ от ответственности и технология",p1:"Приложение «ThermoVision PRO» использует физико-математические алгоритмы (Optical Flow, спектральный анализ 15–250 Гц и теплофизику DIN/GEG) для максимального приближения диагностики к спецприборам. Так как смартфон не имеет физического ИК-сенсора, показатели носят ориентировочный характер и не заменяют судебную экспертизу. Ответственность за ущерб, плесень или убытки исключена.",h4:"Урегулирование споров (§ 36 VSBG)",p2:"Мы не обязаны и не участвуем в процедурах урегулирования споров в потребительских арбитражных комиссиях.",h5:"Право на возврат цифровых ключей (§ 356 Abs. 5 BGB)",p3:"При покупке цифрового лицензионного ключа (PRO-версия) 14-дневное право на отзыв покупки прекращается досрочно с момента начала исполнения договора (активации ключа) с явного согласия покупателя.",t2:"Политика конфиденциальности (DSGVO / GDPR)",h6:"1. Локальная обработка данных",p4:"Видео с камеры, звук микрофона и GPS обрабатываются на 100% локально в реальном времени на вашем устройстве (ст. 6 ч. 1 п. b GDPR) без записи и передачи разработчику.",h7:"2. Хостинг (GitHub Pages) и API погоды",p5:"Хостинг осуществляется через GitHub Pages (GitHub Inc., США; сертификация EU-US Data Privacy Framework). При нажатии «GPS AUTO» координаты запрашиваются напрямую с open-meteo.com.",h8:"3. Ваши права по GDPR",p6:"Вы имеете право на бесплатное получение информации, исправление, блокировку или удаление ваших персональных данных."},
+  ua:{bk:"← Назад у додаток",t1:"Юридична інформація (Impressum)",h1:"Відомості згідно з § 5 DDG (Німеччина)",h2:"Контакт",c1:"Електронний зв'язок: відповідь зазвичай надається протягом 60 хвилин.",h3:"Відмова від відповідальності та технологія",p1:"Додаток «ThermoVision PRO» використовує фізико-математичні алгоритми (Optical Flow, спектральний аналіз 15–250 Гц та теплофізику DIN/GEG). Оскільки смартфон не має фізичного ІЧ-сенсора, показники є орієнтовними та не замінюють сертифіковану експертизу. Відповідальність за збитки чи плісняву виключена.",h4:"Врегулювання спорів (§ 36 VSBG)",p2:"Ми не зобов'язані брати участь у спорах перед споживчою арбітражною комісією.",h5:"Право на повернення цифрових ключів (§ 356 Abs. 5 BGB)",p3:"При придбанні цифрового ключа (PRO-версія) 14-денне право на відмову припиняється достроково після активації ключа за згодою споживача.",t2:"Політика конфіденційності (GDPR)",h6:"1. Локальна обробка даних",p4:"Камера, мікрофон та GPS обробляються на 100% локально на вашому пристрої без збереження чи передачі розробнику.",h7:"2. Хостинг (GitHub Pages) та API погоди",p5:"Хостинг через GitHub Pages (США, EU-US Data Privacy Framework). При використанні «GPS AUTO» дані погоди запитуються напряму з open-meteo.com.",h8:"3. Ваші права за GDPR",p6:"Ви маєте право на доступ, виправлення або видалення ваших персональних даних."},
+pl:{bk:"← Powrót do aplikacji",t1:"Nota prawna (Impressum)",h1:"Informacje zgodnie z § 5 DDG (Niemcy)",h2:"Kontakt",c1:"Kontakt elektroniczny: odpowiedź zwykle w ciągu 60 minut.",h3:"Wyłączenie odpowiedzialności",p1:"Aplikacja ThermoVision PRO wykorzystuje algorytmy fizyczno-matematyczne (Optical Flow, analiza 15–250 Hz, DIN/GEG). Smartfon nie posiada fizycznego czujnika IR, dlatego wyniki mają charakter orientacyjny i nie zastępują audytu certyfikowanego eksperta. Odpowiedzialność za szkody lub pleśń jest wyłączona.",h4:"Rozstrzyganie sporów (§ 36 VSBG)",p2:"Nie jesteśmy zobowiązani do udziału w postępowaniu przed polubownym sądem konsumenckim.",h5:"Prawo odstąpienia dla treści cyfrowych (§ 356 ust. 5 BGB)",p3:"Przy zakupie klucza cyfrowego PRO 14-dniowe prawo odstąpienia wygasa po rozpoczęciu świadczenia (aktywacji klucza) za zgodą konsumenta.",t2:"Polityka prywatności (RODO / GDPR)",h6:"1. Lokalne przetwarzanie",p4:"Dane z kamery, mikrofonu i GPS są przetwarzane w 100% lokalnie na urządzeniu bez wysyłania do twórcy.",h7:"2. Hosting (GitHub Pages) i pogoda",p5:"Hosting przez GitHub Pages (USA; EU-US Data Privacy Framework). Funkcja GPS AUTO pobiera dane bezpośrednio z open-meteo.com.",h8:"3. Twoje prawa RODO",p6:"Masz prawo do wglądu, sprostowania lub usunięcia swoich danych osobowych."},
+fr:{bk:"← Retour à l'application",t1:"Mentions légales (Impressum)",h1:"Informations selon § 5 DDG (Allemagne)",h2:"Contact",c1:"Contact électronique : réponse généralement sous 60 minutes.",h3:"Clause de non-responsabilité",p1:"ThermoVision PRO utilise des algorithmes physico-mathématiques (Optical Flow, spectre 15–250 Hz, DIN/GEG). Les smartphones n'ayant pas de capteur IR physique, les mesures sont indicatives et ne remplacent pas un expert certifié. Toute responsabilité pour dommages ou moisissures est exclue.",h4:"Règlement des litiges (§ 36 VSBG)",p2:"Nous ne sommes pas tenus de participer à une procédure de médiation devant un organisme de consommation.",h5:"Droit de rétractation numérique (§ 356 al. 5 BGB)",p3:"Lors de l'achat d'une clé numérique PRO, le droit de rétractation de 14 jours expire dès l'activation de la clé avec l'accord du consommateur.",t2:"Politique de confidentialité (RGPD)",h6:"1. Traitement local",p4:"Les données caméra, micro et GPS sont traitées 100% localement sur votre appareil sans transfert au développeur.",h7:"2. Hébergement (GitHub Pages) & Météo",p5:"Hébergé via GitHub Pages (USA ; EU-US Data Privacy Framework). GPS AUTO interroge directement open-meteo.com.",h8:"3. Vos droits RGPD",p6:"Vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles."},
+  es:{bk:"← Volver a la app",t1:"Aviso legal (Impressum)",h1:"Información según § 5 DDG (Alemania)",h2:"Contacto",c1:"Contacto electrónico: respuesta habitual en 60 minutos.",h3:"Exención de responsabilidad",p1:"ThermoVision PRO utiliza algoritmos físico-matemáticos (Optical Flow, espectro 15–250 Hz y física DIN/GEG). Al carecer el teléfono de sensor IR físico, los valores son orientativos y no sustituyen a un perito certificado. Se excluye cualquier responsabilidad por daños o moho.",h4:"Resolución de litigios (§ 36 VSBG)",p2:"No estamos obligados a participar en procedimientos de arbitraje de consumo.",h5:"Derecho de desistimiento digital (§ 356 apdo. 5 BGB)",p3:"Al adquirir claves digitales PRO, el derecho de desistimiento de 14 días expira anticipadamente al activar la clave con el consentimiento del consumidor.",t2:"Política de privacidad (RGPD)",h6:"1. Procesamiento local",p4:"Los datos de cámara, micrófono y GPS se procesan 100% localmente en su dispositivo sin enviarse al desarrollador.",h7:"2. Alojamiento (GitHub Pages) y Clima",p5:"Alojado en GitHub Pages (EE. UU.; EU-US Data Privacy Framework). GPS AUTO consulta directamente open-meteo.com.",h8:"3. Sus derechos RGPD",p6:"Tiene derecho de acceso, rectificación y supresión de sus datos personales."},
+nl:{bk:"← Terug naar de app",t1:"Colofon (Impressum)",h1:"Gegevens conform § 5 DDG (Duitsland)",h2:"Contact",c1:"Elektronisch contact: reactie doorgaans binnen 60 minuten.",h3:"Disclaimer & Technologie",p1:"ThermoVision PRO gebruikt fysisch-wiskundige algoritmen (Optical Flow, 15–250 Hz spectrumanalyse en DIN/GEG-bouwfysica). Omdat smartphones geen fysieke IR-sensor hebben, zijn alle waarden indicatief en vervangen zij geen gecertificeerde energieadviseur. Aansprakelijkheid voor schade of schimmel is uitgesloten.",h4:"Geschillenbeslechting (§ 36 VSBG)",p2:"Wij zijn niet verplicht deel te nemen aan geschillenbeslechting voor een consumentencommissie.",h5:"Herroepingsrecht digitale inhoud (§ 356 lid 5 BGB)",p3:"Bij aankoop van digitale licentiesleutels (PRO) vervalt het herroepingsrecht van 14 dagen zodra de sleutel met toestemming van de consument is geactiveerd.",t2:"Privacyverklaring (AVG / GDPR)",h6:"1. Lokale verwerking",p4:"Camera-, microfoon- en GPS-gegevens worden 100% lokaal op uw apparaat verwerkt zonder opslag of verzending naar de ontwikkelaar.",h7:"2. Hosting (GitHub Pages) & Weer-API",p5:"Gehost via GitHub Pages (VS; EU-US Data Privacy Framework). GPS AUTO haalt weergegevens direct op bij open-meteo.com.",h8:"3. Uw rechten onder de AVG",p6:"U heeft te allen tijde recht op inzage, correctie of verwijdering van uw persoonsgegevens."}
+};
+function setLang(c){const d=L[c]||L.de;Object.keys(d).forEach(k=>{const el=document.getElementById(k);if(el)el.textContent=d[k];});document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.dataset.l===c));}
+document.querySelectorAll('.lb').forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+setLang(location.hash?location.hash.slice(1):'de');
+</script>
 </body>
 </html>
