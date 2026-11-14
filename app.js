@@ -14,7 +14,16 @@ nl:{s:"Thermische & energie-audit",b:"START SCANNER",sc:"RICHT OP HET RAAM",lk:"
 
 let L='de',mode='OPTICAL',pal='IRON',baseN=35,sens=4,waveHist=new Array(40).fill(0);
 
-function setL(c){if(!D[c])return;L=c;const d=D[c];document.getElementById('ts').textContent=d.s;document.getElementById('go').textContent=d.b;document.getElementById('pill').textContent=d.sc;document.getElementById('l1').textContent=d.l1;document.getElementById('l2').textContent=d.l2;document.getElementById('l3').textContent=d.l3;document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.dataset.l===c))}
+function setL(c){
+  if(!D[c])return;L=c;const d=D[c];
+  document.getElementById('ts').textContent=d.s;
+  document.getElementById('go').textContent=d.b;
+  document.getElementById('pill').textContent=d.sc;
+  document.getElementById('l1').textContent=d.l1;
+  document.getElementById('l2').textContent=d.l2;
+  document.getElementById('l3').textContent=d.l3;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.dataset.l===c));
+}
 document.querySelectorAll('.lb').forEach(b=>b.onclick=()=>setL(b.dataset.l));
 document.getElementById('leg-lnk').onclick=document.getElementById('inf-btn').onclick=()=>{document.getElementById('mtxt').textContent=D[L].leg;document.getElementById('mod').style.display='flex'};
 document.getElementById('mcls').onclick=()=>document.getElementById('mod').style.display='none';
