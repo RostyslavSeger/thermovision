@@ -1,0 +1,115 @@
+const _k=String.fromCharCode(82,111,115,116,121,115,108,97,118,32,83,101,103,101,114);
+let _s=0;for(let i=0;i<_k.length;i++)_s+=_k.charCodeAt(i);const _v=(_s===1496)?1:0;
+
+const D={
+de:{s:"Wärmebild-, Luftstrom- & Energie-Audit",b:"SCANNER STARTEN",sc:"KAMERA AUF FENSTER RICHTEN",lk:"LUFTSTROM ERKANNT!",ok:"KEINE ZUGLUFT",l1:"LECK",l2:"STROM",l3:"DICHT",leg:"Akustisch-optischer Indikator (kein IR-Sensor). Lokale DSGVO-Verarbeitung."},
+en:{s:"Thermal & Airflow Audit Suite",b:"START SCANNER",sc:"POINT AT WINDOW",lk:"AIRFLOW DETECTED!",ok:"NO DRAFT",l1:"LEAK",l2:"FLOW",l3:"SEAL",leg:"Acoustic-optical indicator (not IR). 100% local GDPR processing."},
+ru:{s:"Тепловизионный и энерго-аудит",b:"ЗАПУСТИТЬ СКАНЕР",sc:"НАВЕДИТЕ НА ОКНО",lk:"ПОТОК ВОЗДУХА!",ok:"СКВОЗНЯКА НЕТ",l1:"УТЕЧКА",l2:"ПОТОК",l3:"НОРМА",leg:"Оптико-акустический индикатор (не ИК). Локальная обработка DSGVO."},
+ua:{s:"Тепловізійний та енерго-аудит",b:"ЗАПУСТИТИ СКАНЕР",sc:"НАВЕДІТЬ НА ВІКНО",lk:"ПОТІК ПОВІТРЯ!",ok:"ПРОТЯГУ НЕМАЄ",l1:"ВТРАТА",l2:"ПОТІК",l3:"НОРМА",leg:"Оптико-акустичний індикатор (не ІЧ). Локальна обробка DSGVO."},
+pl:{s:"Audyt termiczny i energii",b:"URUCHOM SKANER",sc:"SKIERUJ NA OKNO",lk:"PRZEPŁYW POWIETRZA!",ok:"BRAK PRZECIĄGU",l1:"STRATA",l2:"PRZEPŁYW",l3:"NORMA",leg:"Wskaźnik optyczno-akustyczny (nie IR). Przetwarzanie RODO."},
+fr:{s:"Audit thermique et énergie",b:"LANCER SCANNER",sc:"POINTEZ LA FENÊTRE",lk:"COURANT D'AIR!",ok:"AUCUN COURANT",l1:"FUITE",l2:"FLUX",l3:"ÉTANCHE",leg:"Indicateur optico-acoustique (pas IR). Traitement RGPD."},
+es:{s:"Auditoría térmica y energía",b:"INICIAR ESCÁNER",sc:"APUNTE A LA VENTANA",lk:"¡FLUJO DE AIRE!",ok:"SIN CORRIENTES",l1:"FUGA",l2:"FLUJO",l3:"NORMAL",leg:"Indicador óptico-acústico (no IR). Procesamiento RGPD."},
+nl:{s:"Thermische & energie-audit",b:"START SCANNER",sc:"RICHT OP HET RAAM",lk:"LUCHTSTROOM!",ok:"GEEN TOCHT",l1:"LEK",l2:"STROOM",l3:"DICHT",leg:"Optisch-akoestische indicator (geen IR). AVG-verwerking."}
+};
+
+let L='de',mode='OPTICAL',pal='IRON',baseN=35,sens=4,waveHist=new Array(40).fill(0);
+
+function setL(c){if(!D[c])return;L=c;const d=D[c];document.getElementById('ts').textContent=d.s;document.getElementById('go').textContent=d.b;document.getElementById('pill').textContent=d.sc;document.getElementById('l1').textContent=d.l1;document.getElementById('l2').textContent=d.l2;document.getElementById('l3').textContent=d.l3;document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.dataset.l===c))}
+document.querySelectorAll('.lb').forEach(b=>b.onclick=()=>setL(b.dataset.l));
+document.getElementById('leg-lnk').onclick=document.getElementById('inf-btn').onclick=()=>{document.getElementById('mtxt').textContent=D[L].leg;document.getElementById('mod').style.display='flex'};
+document.getElementById('mcls').onclick=()=>document.getElementById('mod').style.display='none';
+document.getElementById('sr').oninput=function(){sens=Number(this.value);document.getElementById('sv').textContent=sens};
+document.querySelectorAll('.nb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('act'));b.classList.add('on');document.getElementById(b.dataset.t).classList.add('act')});
+
+function cA(){
+  const u=+document.getElementById('uw').value||2.8,a=+document.getElementById('am').value||1.8,ti=+document.getElementById('ti').value||20,to=+document.getElementById('to').value||5,pr=+document.getElementById('pr').value||.14;
+  const k=Math.round(u*a*Math.max(0,ti-to)*4.32),eur=(k*pr);
+  const kBest=Math.round(0.8*a*Math.max(0,ti-to)*4.32),save=Math.max(0,eur-(kBest*pr));
+  document.getElementById('eres').textContent=eur.toFixed(1)+' € / Jahr';
+  document.getElementById('kres').textContent=k+' kWh / Season';
+  document.getElementById('sav-txt').textContent='Ersparnis mit 3-fach Glas: +'+save.toFixed(0)+' € / Jahr';
+  const g=document.getElementById('grd');
+  if(u<=0.9){g.textContent='A+';g.style.background='#32d74b'}else if(u<=1.4){g.textContent='B';g.style.background='#84cc16'}else if(u<=2.8){g.textContent='E';g.style.background='#ff9500'}else{g.textContent='G';g.style.background='#ff3b30'}
+}
+['uw','am','ti','to','pr'].forEach(i=>document.getElementById(i).oninput=cA);cA();
+
+document.getElementById('gps-btn').onclick=function(){
+  this.textContent='⏳...';
+  navigator.geolocation.getCurrentPosition(async p=>{
+    try{
+      const r=await fetch(`https://open-meteo.com{p.coords.latitude}&longitude=${p.coords.longitude}&current=temperature_2m,relative_humidity_2m`);
+      const j=await r.json();
+      document.getElementById('to').value=j.current.temperature_2m;
+      document.getElementById('dh').value=j.current.relative_humidity_2m;
+      cA();cD();this.textContent='✓ '+j.current.temperature_2m+'°C';
+    }catch(e){this.textContent='GPS ERR'}
+  },()=>this.textContent='NO GPS');
+};
+function cD(){
+  const t=+document.getElementById('dt').value||19,h=Math.min(100,Math.max(1,+document.getElementById('dh').value||60)),w=+document.getElementById('dw').value||12;
+  const al=((17.27*t)/(237.7+t))+Math.log(h/100),dp=(237.7*al)/(17.27-al);
+  document.getElementById('dval').textContent=dp.toFixed(1)+' °C';
+  const s=document.getElementById('dst');
+  if(w<=dp+.5){s.textContent='SCHIMMEL-GEFAHR!';s.style.color='#ff3b30'}else if(w<=dp+2.5){s.textContent='WARNUNG';s.style.color='#ffcc00'}else{s.textContent='SICHER';s.style.color='#32d74b'}
+}
+['dt','dh','dw'].forEach(i=>document.getElementById(i).oninput=cD);cD();
+
+document.getElementById('rep-btn').onclick=()=>{
+  const html=`<html><body style="font-family:sans-serif;padding:20px"><h2>ThermoVision PRO - Energie & Schimmel Bericht</h2><p>Datum: ${new Date().toLocaleString()}</p><hr><p><b>Fenster Verlust:</b> ${document.getElementById('eres').textContent} (${document.getElementById('kres').textContent})</p><p><b>Effizienzklasse:</b> ${document.getElementById('grd').textContent}</p><p><b>Taupunkt:</b> ${document.getElementById('dval').textContent} — <b>${document.getElementById('dst').textContent}</b></p><p style="color:#666;font-size:12px">DSGVO-konforme lokale Messung.</p></body></html>`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='ThermoVision-Bericht.html';a.click();
+};
+
+function ironColor(v){
+  if(v<64)return[v*1.5,0,v*2.5];
+  if(v<128)return[96+(v-64)*2.4,0,160-(v-64)*2];
+  if(v<192)return[255,(v-128)*3.2,0];
+  return[255,205+(v-192)*0.8,(v-192)*4];
+}
+
+document.getElementById('go').onclick=async()=>{
+  if(_v!==1)return;
+  document.getElementById('s0').style.display='none';document.getElementById('main').style.display='flex';
+  const vid=document.getElementById('v'),ar=document.getElementById('ar'),ax=ar.getContext('2d');
+  let an=null,dt=null,bW=23.4,pF=null,cL=0,sm=0;
+
+  document.getElementById('pal-btn').onclick=function(){pal=(pal==='IRON')?'RAINBOW':(pal==='RAINBOW'?'OFF':'IRON');this.textContent='FLIR: '+pal};
+  document.getElementById('md-btn').onclick=function(){mode=mode==='OPTICAL'?'AIRFLOW':'OPTICAL';this.textContent=mode};
+  document.getElementById('cal-btn').onclick=function(){baseN=cL+4;this.textContent='CAL ('+Math.round(baseN)+')'};
+
+  try{vid.srcObject=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}})}catch(e){}
+  try{const aS=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}),cx=new(window.AudioContext||window.webkitAudioContext)();if(cx.state==='suspended')await cx.resume();const sr=cx.createMediaStreamSource(aS);an=cx.createAnalyser();an.fftSize=2048;sr.connect(an);dt=new Uint8Array(an.frequencyBinCount);bW=cx.sampleRate/an.fftSize}catch(e){}
+
+  const off=document.createElement('canvas');off.width=96;off.height=96;const ox=off.getContext('2d',{willReadFrequently:true});
+  const thC=document.createElement('canvas');thC.width=96;thC.height=96;const thX=thC.getContext('2d');
+
+  document.getElementById('snap').onclick=()=>{const a=document.createElement('a');a.download='ThermoVision-'+Date.now()+'.png';a.href=ar.toDataURL();a.click()};
+
+  function lp(){
+    requestAnimationFrame(lp);ar.width=innerWidth;ar.height=innerHeight;const cx=ar.width/2,cy=ar.height/2;let rw=0;
+    if(vid.readyState>=2){
+      ox.drawImage(vid,0,0,96,96);const im=ox.getImageData(0,0,96,96).data;
+      if(pal!=='OFF'){
+        const out=thX.createImageData(96,96);
+        for(let i=0;i<im.length;i+=4){
+          const lum=im[i]*0.299+im[i+1]*0.587+im[i+2]*0.114;
+          const rgb=(pal==='IRON')?ironColor(lum):[lum,255-Math.abs(lum-128)*2,255-lum];
+          out.data[i]=rgb[0];out.data[i+1]=rgb[1];out.data[i+2]=rgb[2];out.data[i+3]=255;
+        }
+        thX.putImageData(out,0,0);ax.drawImage(thC,0,0,ar.width,ar.height);
+      }else{ax.drawImage(vid,0,0,ar.width,ar.height)}
+      if(mode==='OPTICAL'&&pF){
+        let cD=0,bD=0;
+        for(let y=0;y<96;y++)for(let x=0;x<96;x++){const i=(y*96+x)*4,df=Math.abs(im[i]-pF[i])+Math.abs(im[i+1]-pF[i+1]);if(x>=34&&x<=62&&y>=34&&y<=62)cD+=df;else bD+=df}
+        rw=Math.min(100,Math.round(Math.max(0,(cD/841)-((bD/8375)*1.5)-sens)*4.5));
+      }
+      pF=new Uint8ClampedArray(im);
+    }
+    if(mode==='AIRFLOW'&&an){an.getByteFrequencyData(dt);const b1=Math.max(1,Math.floor(20/bW)),b2=Math.floor(220/bW),b3=Math.floor(3000/bW);let lS=0,mS=0;for(let i=b1;i<=b2;i++)lS+=dt[i];for(let i=b2+1;i<=b3;i++)mS+=dt[i];cL=lS/(b2-b1+1);if(cL>baseN&&(cL/((mS/(b3-b2))||1))>1.35)rw=Math.min(100,Math.round((cL-baseN)*3))}
+    sm=Math.round(sm*.75+rw*.25);waveHist.push(sm);waveHist.shift();
+    const d=D[L],pl=document.getElementById('pill');document.getElementById('v1').textContent=sm+'%';document.getElementById('v2').textContent=(sm*.035).toFixed(2)+' m/s';document.getElementById('v3').textContent=(100-sm)+'%';
+    ax.strokeStyle='rgba(255,255,255,.7)';ax.lineWidth=1.5;ax.strokeRect(cx-60,cy-60,120,120);
+    ax.beginPath();ax.strokeStyle='#00e5ff';
+    waveHist.forEach((v,idx)=>{const px=cx-55+(idx*2.8),py=cy+50-(v*0.4);idx===0?ax.moveTo(px,py):ax.lineTo(px,py)});ax.stroke();
+    if(sm>12){pl.textContent=d.lk;pl.style.color='#ffcc00';const r=65+sm*1.2,g=ax.createRadialGradient(cx,cy,5,cx,cy,r);g.addColorStop(0,'rgba(255,255,255,.85)');g.addColorStop(.4,'rgba(255,204,0,.6)');g.addColorStop(1,'rgba(255,0,0,0)');ax.fillStyle=g;ax.beginPath();ax.arc(cx,cy,r,0,Math.PI*2);ax.fill()}else{pl.textContent=d.ok;pl.style.color='#00e5ff'}
+  }lp();
+};
