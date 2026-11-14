@@ -1,0 +1,19 @@
+{
+  "name": "ThermoVision PRO",
+  "short_name": "ThermoVision",
+  "description": "Thermal, Airflow & Building Energy Audit Suite",
+  "start_url": "/thermovision/index.html",
+  "scope": "/thermovision/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#05070e",
+  "theme_color": "#ff9500",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
