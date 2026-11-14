@@ -131,7 +131,7 @@ $('mcls').onclick=()=>{$('mod').style.display='none';};
 $('leg-lnk').onclick=$('inf-btn').onclick=()=>showM(D[L].leg,false);
 function openPro(){showM(isPro?'PRO LIZENZ AKTIV:\nAlle Sensoren (ΔT, m/s, MIN COLD), Paletten, GPS-Wetter, saubere Foto-Beweise & unbegrenzte Wohnungs-Berichte sind freigeschaltet.':'PRO VERSION FREISCHALTEN:\n• Exakte ΔT & Luftstrom-Messung (m/s)\n• Automatische Kältebrücken-Erkennung (MIN COLD)\n• Alle FLIR-Paletten (RAINBOW / ARCTIC) & Fotos ohne Wasserzeichen\n• GPS-Live-Wetter & unbegrenzter Vermieter-Bericht\n\nBitte Lizenzschlüssel eingeben:',!isPro);}
 $('pro-btn').onclick=$('box-v2').onclick=openPro;
-function _chk(s){let a=0,b=0;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a+=c;b+=c*(i+1);}return a===676&&b===3387;}
+function _chk(s){s=s.replace(/[^A-Z0-9]/g,'');let a=0,b=0;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a+=c;b+=c*(i+1);}return a===597&&b===2745;}
 function updateProUI(){if(isPro){$('pro-btn').textContent='PRO ✓';$('gps-btn').textContent='GPS AUTO';$('rep-btn').textContent='PRO BERICHT EXPORT (HTML)';}}
 $('mact').onclick=()=>{if(_chk($('pkey').value.trim().toUpperCase())){isPro=true;localStorage.setItem('tv_pro','1');updateProUI();cD();showM('PRO Lizenz erfolgreich aktiviert!',false);}else{alert('Ungültiger Lizenzschlüssel');}};
 updateProUI();
