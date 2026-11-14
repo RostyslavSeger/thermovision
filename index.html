@@ -16,12 +16,11 @@ body{background:#06080f;color:#fff;overflow:hidden}
 .lb.on{background:linear-gradient(90deg,#ff3b30,#ff9500);border-color:#ffcc00}
 #go{background:linear-gradient(90deg,#ff3b30,#ff9500);color:#fff;border:none;padding:16px 28px;border-radius:14px;font-size:15px;font-weight:bold}
 #main{position:fixed;inset:0;display:none;flex-direction:column}
-.tab{flex:1;position:relative;overflow-y:auto;display:none;padding-bottom:58px}
-.tab.act{display:block}
+.tab{flex:1;position:relative;overflow-y:auto;display:none;padding-bottom:58px}.tab.act{display:block}
 #v{display:none}#ar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .hud{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;padding-bottom:56px}
-.top{pointer-events:auto;display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(0,0,0,.78);gap:4px}
-.bs{background:#1e293b;color:#fff;border:1px solid #475569;padding:6px 8px;border-radius:8px;font-size:11px;font-weight:bold}
+.top{pointer-events:auto;display:flex;justify-content:space-between;align-items:center;padding:8px;background:rgba(0,0,0,.8);gap:4px}
+.bs{background:#1e293b;color:#fff;border:1px solid #475569;padding:6px 7px;border-radius:8px;font-size:10px;font-weight:bold}
 #pill{align-self:center;background:rgba(0,0,0,.85);border:1px solid #ff9500;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:bold;color:#ffcc00}
 .bot{pointer-events:auto;background:rgba(6,8,15,.94);padding:8px 12px;display:flex;flex-direction:column;gap:6px}
 .srow{display:flex;align-items:center;gap:8px;font-size:11px;color:#94a3b8}.srow input{flex:1}
@@ -33,11 +32,12 @@ body{background:#06080f;color:#fff;overflow:hidden}
 .card h3{font-size:14px;color:#ff9500;display:flex;justify-content:space-between;align-items:center}
 .row{display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:8px}
 .row select,.row input{background:#1e293b;color:#fff;border:1px solid #334155;padding:6px;border-radius:8px;width:125px;text-align:right}
+.chk{display:flex;align-items:center;gap:8px;font-size:12px;color:#cbd5e1}.chk input{width:16px;height:16px}
 .rbox{background:rgba(255,149,0,.12);border:1px solid #ff9500;border-radius:10px;padding:10px;text-align:center}.rbox b{font-size:20px;color:#ffcc00;display:block}
 .grade{display:inline-block;padding:3px 10px;border-radius:6px;font-weight:900;font-size:14px;background:#ff3b30;color:#fff}
 .nav{position:fixed;bottom:0;left:0;right:0;height:54px;background:#0b0e17;border-top:1px solid #1e293b;display:grid;grid-template-columns:repeat(3,1fr);z-index:40}
 .nb{background:none;border:none;color:#64748b;font-size:11px;font-weight:bold}.nb.on{color:#ff9500;background:rgba(255,149,0,.1)}
-#mod{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:20px}
+#mod{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:20px}
 .mbox{background:#111625;border:1px solid #ff9500;border-radius:14px;padding:16px;max-width:340px;font-size:12px;line-height:1.5;display:flex;flex-direction:column;gap:10px}
 </style>
 </head>
@@ -53,13 +53,14 @@ body{background:#06080f;color:#fff;overflow:hidden}
     <button class="lb" data-l="es">ES</button><button class="lb" data-l="nl">NL</button>
   </div>
   <button id="go">SCANNER STARTEN</button>
-  <div id="leg-lnk" style="font-size:11px;color:#64748b;text-decoration:underline">Legal & DSGVO / GDPR</div>
+  <button class="bs" id="leg-lnk" style="margin-top:4px">Legal & DSGVO / GDPR</button>
 </div>
 <div id="main">
   <div id="t1" class="tab act">
     <video id="v" autoplay playsinline muted></video><canvas id="ar"></canvas>
     <div class="hud">
       <div class="top">
+        <button class="bs" id="home-btn">🏠 MENU</button>
         <button class="bs" id="pal-btn">FLIR: IRON</button>
         <button class="bs" id="md-btn">OPTICAL</button>
         <button class="bs" id="cal-btn">CAL</button>
@@ -87,6 +88,8 @@ body{background:#06080f;color:#fff;overflow:hidden}
       <div class="row"><span>Innen (°C):</span><input type="number" id="ti" value="20"></div>
       <div class="row"><span>Außen (°C):</span><input type="number" id="to" value="5"></div>
       <div class="row"><span>Preis (€/kWh):</span><input type="number" id="pr" value="0.14" step="0.01"></div>
+      <label class="chk"><input type="checkbox" id="c1"> Blatt-Test: Papier rutscht leicht durch Dichtung</label>
+      <label class="chk"><input type="checkbox" id="c2"> Kondenswasser / Zugluft an der Rahmenkante</label>
       <div class="rbox">
         <div style="margin-bottom:4px">Klasse: <span class="grade" id="grd">E</span></div>
         <b id="eres">0 € / Jahr</b>
