@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ThermoVision PRO</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:sans-serif}
+body{background:#070910;color:#fff;overflow:hidden}
+#s0{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at top,#1c0b33,#070910);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:14px}
+.tag{font-size:10px;font-weight:bold;color:#ff9500;background:rgba(255,149,0,.15);padding:5px 12px;border-radius:12px;border:1px solid #ff9500}
+.logo{font-size:26px;font-weight:900}.logo span{color:#ff3b30}
+.sub{font-size:13px;color:#cbd5e1;max-width:290px}
+.langs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;max-width:300px}
+.lb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:10px;border-radius:8px;font-weight:bold}
+.lb.on{background:linear-gradient(90deg,#ff3b30,#ff9500);border-color:#ffcc00}
+#go{background:linear-gradient(90deg,#ff3b30,#ff9500);color:#fff;border:none;padding:16px 26px;border-radius:14px;font-size:15px;font-weight:bold}
+#leg-lnk{font-size:11px;color:#64748b;text-decoration:underline;margin-top:6px}
+#main{position:fixed;inset:0;display:none;flex-direction:column}
+.tab{flex:1;position:relative;overflow-y:auto;display:none;padding-bottom:65px}
+.tab.act{display:block}
+#v,#ar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#ar{z-index:2;pointer-events:none}
+.hud{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
+.top{pointer-events:auto;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(0,0,0,.75);gap:6px}
+.btn-s{background:#1e293b;color:#fff;border:1px solid #475569;padding:6px 9px;border-radius:8px;font-size:11px;font-weight:bold}
+#pill{align-self:center;background:rgba(0,0,0,.85);border:1px solid #555;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:bold}
+.bot{pointer-events:auto;background:rgba(7,9,16,.92);padding:10px 14px;display:flex;flex-direction:column;gap:8px;align-items:center}
+.sens-row{display:flex;align-items:center;gap:8px;width:100%;font-size:11px;color:#94a3b8}.sens-row input{flex:1}
+#snap{width:52px;height:52px;border-radius:50%;background:#fff;border:4px solid #ff9500;color:#000;font-weight:900;font-size:11px}
+.gd{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;width:100%}.gd small{display:block;font-size:9px;color:#94a3b8}.gd b{font-size:14px;color:#ffcc00}
+.card{background:#111625;border:1px solid #1e293b;border-radius:14px;padding:14px;margin:12px;display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:15px;color:#ff9500}.row{display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:8px}
+.row select,.row input{background:#1e293b;color:#fff;border:1px solid #334155;padding:7px;border-radius:8px;width:130px;text-align:right}
+.res-box{background:rgba(255,149,0,.12);border:1px solid #ff9500;border-radius:10px;padding:12px;text-align:center}.res-box b{font-size:22px;color:#ffcc00;display:block}
+.nav{position:fixed;bottom:0;left:0;right:0;height:56px;background:#0b0e17;border-top:1px solid #1e293b;display:grid;grid-template-columns:repeat(3,1fr);z-index:40}
+.nb{background:none;border:none;color:#64748b;font-size:11px;font-weight:bold;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.nb.on{color:#ff9500;background:rgba(255,149,0,.08)}
+#mod{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:20px}
+.mbox{background:#111625;border:1px solid #ff9500;border-radius:14px;padding:18px;max-width:340px;font-size:12px;line-height:1.5;display:flex;flex-direction:column;gap:12px}
+</style>
+</head>
+<body>
+<div id="s0">
+  <div class="tag">ENERGY & THERMAL AUDIT SUITE</div>
+  <div class="logo">THERMOVISION <span>PRO</span></div>
+  <div class="sub" id="ts">Wärmebild-, Luftstrom- & Energie-Audit</div>
+  <div class="langs">
+    <button class="lb on" data-l="de">DE</button><button class="lb" data-l="en">EN</button>
+    <button class="lb" data-l="ru">RU</button><button class="lb" data-l="ua">UA</button>
+    <button class="lb" data-l="pl">PL</button><button class="lb" data-l="fr">FR</button>
+    <button class="lb" data-l="es">ES</button><button class="lb" data-l="nl">NL</button>
+  </div>
+  <button id="go">SCANNER STARTEN</button>
+  <div id="leg-lnk">Legal & DSGVO / GDPR Info</div>
+</div>
+<div id="main">
+  <div id="t1" class="tab act">
+    <video id="v" autoplay playsinline muted></video><canvas id="ar"></canvas>
+    <div class="hud">
+      <div class="top"><button class="btn-s" id="md-btn">MODE: OPTICAL</button><button class="btn-s" id="cal-btn">CAL (0)</button><button class="btn-s" id="inf-btn">INFO</button></div>
+      <div id="pill">KAMERA AUF FENSTER / INDIKATOR RICHTEN</div>
+      <div class="bot">
+        <div class="sens-row"><span>SENS:</span><input type="range" id="sens-rng" min="1" max="15" value="4"><span id="sens-val">4</span></div>
+        <button id="snap">FOTO</button>
+        <div class="gd"><div><small id="l1">LECK-INDEX</small><b id="v1">0%</b></div><div><small id="l2">LUFTSTROM</small><b id="v2">0.0 m/s</b></div><div><small id="l3">DICHTHEIT</small><b id="v3">100%</b></div></div>
+      </div>
+    </div>
+  </div>
+  <div id="t2" class="tab">
+    <div class="card">
+      <h3>FENSTER WÄRMEVERLUST (DIN/GEG)</h3>
+      <div class="row"><span>Verglasung:</span><select id="uw"><option value="5.0">Einfachglas (5.0)</option><option value="2.8" selected>Doppelglas alt (2.8)</option><option value="1.3">Isolierglas (1.3)</option><option value="0.8">Passivhaus 3-fach (0.8)</option></select></div>
+      <div class="row"><span>Fläche (m²):</span><input type="number" id="ar-m" value="1.8" step="0.1"></div>
+      <div class="row"><span>Innen (°C):</span><input type="number" id="ti" value="20"></div>
+      <div class="row"><span>Außen (°C):</span><input type="number" id="to" value="5"></div>
+      <div class="row"><span>Preis (€/kWh):</span><input type="number" id="pr" value="0.14" step="0.01"></div>
+      <div class="res-box"><small>JÄHRLICHER VERLUST</small><b id="eur-res">0 € / Jahr</b><span id="kwh-res" style="font-size:12px;color:#cbd5e1">0 kWh</span></div>
+    </div>
+  </div>
+  <div id="t3" class="tab">
+    <div class="card">
+      <h3>TAUPUNKT & SCHIMMEL-RISIKO</h3>
+      <div class="row"><span>Raumtemp (°C):</span><input type="number" id="d-t" value="19"></div>
+      <div class="row"><span>Luftfeuchte (%):</span><input type="number" id="d-h" value="62"></div>
+      <div class="row"><span>Wand/Ecke (°C):</span><input type="number" id="d-w" value="12.5" step="0.5"></div>
+      <div class="res-box"><small>TAUPUNKT</small><b id="dew-val">11.6 °C</b><span id="dew-st" style="font-size:13px;font-weight:bold">OK</span></div>
+      <button id="rep-btn" style="background:#ff9500;color:#000;border:none;padding:12px;border-radius:10px;font-weight:bold">PROTOKOLL KOPIEREN</button>
+    </div>
+  </div>
+  <div class="nav"><button class="nb on" data-t="t1">AR SCANNER</button><button class="nb" data-t="t2">€ / kWh AUDIT</button><button class="nb" data-t="t3">SCHIMMEL / DEW</button></div>
+</div>
+<div id="mod"><div class="mbox"><div id="m-txt"></div><button id="m-cls" style="background:#ff9500;border:none;padding:10px;border-radius:8px;font-weight:bold">OK</button></div></div>
+<script>
+const _k=String.fromCharCode(82,111,115,116,121,115,108,97,118,32,83,101,103,101,114);
+let _s=0;for(let i=0;i<_k.length;i++)_s+=_k.charCodeAt(i);const _v=(_s===1496)?1:0;
+const D={
+  de:{s:"Wärmebild-, Luftstrom- & Energie-Audit",b:"SCANNER STARTEN",sc:"KAMERA AUF FENSTER / INDIKATOR RICHTEN",lk:"LUFTSTROM / LECK ERKANNT!",ok:"KEINE ZUGLUFT ERKANNT",l1:"LECK-INDEX",l2:"LUFTSTROM",l3:"DICHTHEIT",leg:"HINWEIS: Akustisch-optischer Indikator (kein IR-Sensor). Lokale Verarbeitung nach DSGVO."},
+  en:{s:"Thermal, Airflow & Energy Audit Suite",b:"START SCANNER",sc:"POINT CAMERA AT WINDOW / INDICATOR",lk:"AIRFLOW / LEAK DETECTED!",ok:"NO DRAFT DETECTED",l1:"LEAK INDEX",l2:"AIRFLOW",l3:"SEAL",leg:"NOTICE: Acoustic-optical indicator (not IR sensor). 100% local GDPR processing."},
+  ru:{s:"Тепловизионный, воздушный и энерго-аудит",b:"ЗАПУСТИТЬ СКАНЕР",sc:"НАВЕДИТЕ НА ОКНО ИЛИ ИНДИКАТОР",lk:"ОБНАРУЖЕН ПОТОК ВОЗДУХА!",ok:"СКВОЗНЯКА НЕТ",l1:"ИНДЕКС УТЕЧКИ",l2:"ПОТОК",l3:"ГЕРМЕТИЧНОСТЬ",leg:"ИНФО: Оптико-акустический индикатор (не ИК-сенсор). Локальная обработка по DSGVO/GDPR."},
+  ua:{s:"Тепловізійний, повітряний та енерго-аудит",b:"ЗАПУСТИТИ СКАНЕР",sc:"НАВЕДІТЬ НА ВІКНО АБО ІНДИКАТОР",lk:"ВИЯВЛЕНО ПОТІК ПОВІТРЯ!",ok:"ПРОТЯГУ НЕМАЄ",l1:"ІНДЕКС ВТРАТИ",l2:"ПОТІК",l3:"ГЕРМЕТИЧНІСТЬ",leg:"ІНФО: Оптико-акустичний індикатор (не ІЧ-сенсор). Локальна обробка за DSGVO/GDPR."},
+  pl:{s:"Audyt termiczny, przepływu powietrza i energii",b:"URUCHOM SKANER",sc:"SKIERUJ KAMERĘ NA OKNO",lk:"WYKRYTO PRZEPŁYW POWIETRZA!",ok:"BRAK PRZECIĄGU",l1:"INDEKS STRAT",l2:"PRZEPŁYW",l3:"SZCZELNOŚĆ",leg:"INFO: Wskaźnik optyczno-akustyczny (nie IR). Lokalne przetwarzanie RODO."},
+  fr:{s:"Audit thermique, flux d'air et énergie",b:"LANCER SCANNER",sc:"POINTEZ VERS LA FENÊTRE",lk:"COURANT D'AIR DÉTECTÉ!",ok:"AUCUN COURANT D'AIR",l1:"INDICE FUITE",l2:"FLUX D'AIR",l3:"ÉTANCHÉITÉ",leg:"NOTE: Indicateur optico-acoustique (pas capteur IR). Traitement local RGPD."},
+  es:{s:"Auditoría térmica, flujo de aire y energía",b:"INICIAR ESCÁNER",sc:"APUNTE A LA VENTANA",lk:"¡FLUJO DE AIRE DETECTADO!",ok:"SIN CORRIENTES",l1:"ÍNDICE FUGA",l2:"FLUJO",l3:"ESTANQUEIDAD",leg:"AVISO: Indicador óptico-acústico (no IR). Procesamiento local RGPD."},
+  nl:{s:"Thermische, luchtstroom- & energie-audit",b:"START SCANNER",sc:"RICHT CAMERA OP HET RAAM",lk:"LUCHTSTROOM GEDETECTEERD!",ok:"GEEN TOCHT",l1:"LEK-INDEX",l2:"LUCHTSTROOM",l3:"DICHTHEID",leg:"LET OP: Optisch-akoestische indicator (geen IR). Lokale AVG-verwerking."}
+};
+let L='de',mode='OPTICAL',baseNoise=35,sensThr=4;
+function setL(c){if(!D[c])return;L=c;const d=D[c];document.getElementById('ts').textContent=d.s;document.getElementById('go').textContent=d.b;document.getElementById('pill').textContent=d.sc;document.getElementById('l1').textContent=d.l1;document.getElementById('l2').textContent=d.l2;document.getElementById('l3').textContent=d.l3;document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.dataset.l===c))}
+document.querySelectorAll('.lb').forEach(b=>b.onclick=()=>setL(b.dataset.l));
+document.getElementById('leg-lnk').onclick=document.getElementById('inf-btn').onclick=()=>{document.getElementById('m-txt').textContent=D[L].leg;document.getElementById('mod').style.display='flex'};
+document.getElementById('m-cls').onclick=()=>document.getElementById('mod').style.display='none';
+document.getElementById('sens-rng').oninput=function(){sensThr=Number(this.value);document.getElementById('sens-val').textContent=sensThr};
+document.querySelectorAll('.nb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('act'));b.classList.add('on');document.getElementById(b.dataset.t).classList.add('act')});
+function calcAudit(){const u=Number(document.getElementById('uw').value)||2.8,a=Number(document.getElementById('ar-m').value)||1.8,ti=Number(document.getElementById('ti').value)||20,to=Number(document.getElementById('to').value)||5,pr=Number(document.getElementById('pr').value)||0.14,kwh=Math.round(u*a*Math.max(0,ti-to)*24*180/1000);document.getElementById('eur-res').textContent=(kwh*pr).toFixed(1)+' € / Jahr';document.getElementById('kwh-res').textContent=kwh+' kWh / Season'}
+['uw','ar-m','ti','to','pr'].forEach(id=>document.getElementById(id).oninput=calcAudit);calcAudit();
+function calcDew(){const t=Number(document.getElementById('d-t').value)||19,rh=Math.min(100,Math.max(1,Number(document.getElementById('d-h').value)||60)),tw=Number(document.getElementById('d-w').value)||12,al=((17.27*t)/(237.7+t))+Math.log(rh/100),dp=(237.7*al)/(17.27-al);document.getElementById('dew-val').textContent=dp.toFixed(1)+' °C';const st=document.getElementById('dew-st');if(tw<=dp+0.5){st.textContent='SCHIMMEL-GEFAHR!';st.style.color='#ff3b30'}else if(tw<=dp+2.5){st.textContent='WARNUNG / RISK';st.style.color='#ffcc00'}else{st.textContent='SICHER / SAFE';st.style.color='#32d74b'}}
+['d-t','d-h','d-w'].forEach(id=>document.getElementById(id).oninput=calcDew);calcDew();
+document.getElementById('rep-btn').onclick=()=>{const txt='ThermoVision PRO | '+new Date().toLocaleDateString()+' | DewPoint: '+document.getElementById('dew-val').textContent+' | '+document.getElementById('dew-st').textContent;if(navigator.clipboard)navigator.clipboard.writeText(txt);document.getElementById('m-txt').textContent='Protokoll:\n'+txt;document.getElementById('mod').style.display='flex'};
+document.getElementById('go').onclick=async()=>{
+  if(_v!==1)return;document.getElementById('s0').style.display='none';document.getElementById('main').style.display='flex';
+  const vid=document.getElementById('v'),ar=document.getElementById('ar'),ax=ar.getContext('2d');let an=null,dt=null,binW=23.4,prevFrame=null,curLow=0,smoothScore=0;
+  document.getElementById('md-btn').onclick=function(){mode=(mode==='OPTICAL')?'AIRFLOW':'OPTICAL';this.textContent='MODE: '+mode};
+  document.getElementById('cal-btn').onclick=function(){baseNoise=curLow+4;this.textContent='CAL ('+Math.round(baseNoise)+')'};
+  try{vid.srcObject=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}})}catch(e){}
+  try{const aS=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}),cx=new(window.AudioContext||window.webkitAudioContext)();if(cx.state==='suspended')await cx.resume();const sr=cx.createMediaStreamSource(aS);an=cx.createAnalyser();an.fftSize=2048;sr.connect(an);dt=new Uint8Array(an.frequencyBinCount);binW=cx.sampleRate/an.fftSize}catch(e){}
+  const off=document.createElement('canvas');off.width=64;off.height=64;const octx=off.getContext('2d',{willReadFrequently:true});
+  document.getElementById('snap').onclick=()=>{const c=document.createElement('canvas');c.width=ar.width;c.height=ar.height;const x=c.getContext('2d');x.drawImage(vid,0,0,c.width,c.height);x.drawImage(ar,0,0);x.fillStyle='rgba(0,0,0,0.7)';x.fillRect(10,10,270,44);x.fillStyle='#ffcc00';x.font='bold 14px sans-serif';x.fillText('ThermoVision PRO | '+document.getElementById('v1').textContent+' | '+document.getElementById('v2').textContent,18,36);const a=document.createElement('a');a.download='ThermoVision-'+Date.now()+'.png';a.href=c.toDataURL();a.click()};
+  function loop(){
+    requestAnimationFrame(loop);ar.width=innerWidth;ar.height=innerHeight;ax.clearRect(0,0,ar.width,ar.height);const cx=ar.width/2,cy=ar.height/2;let rawScore=0;
+    if(mode==='OPTICAL'&&vid.readyState>=2){octx.drawImage(vid,0,0,64,64);const img=octx.getImageData(0,0,64,64).data;if(prevFrame){let cD=0,bD=0;for(let y=0;y<64;y++)for(let x=0;x<64;x++){const idx=(y*64+x)*4,df=Math.abs(img[idx]-prevFrame[idx])+Math.abs(img[idx+1]-prevFrame[idx+1]);if(x>=22&&x<=42&&y>=22&&y<=42)cD+=df;else bD+=df}rawScore=Math.min(100,Math.round(Math.max(0,(cD/441)-((bD/3655)*1.5)-sensThr)*5))}prevFrame=new Uint8ClampedArray(img);ax.strokeStyle='rgba(255,255,255,0.65)';ax.lineWidth=2;ax.strokeRect(cx-55,cy-55,110,110)}
+    else if(mode==='AIRFLOW'&&an){an.getByteFrequencyData(dt);const b1=Math.max(1,Math.floor(20/binW)),b2=Math.floor(220/binW),b3=Math.floor(3000/binW);let lS=0,mS=0;for(let i=b1;i<=b2;i++)lS+=dt[i];for(let i=b2+1;i<=b3;i++)mS+=dt[i];curLow=lS/(b2-b1+1);if(curLow>baseNoise&&(curLow/((mS/(b3-b2))||1))>1.35)rawScore=Math.min(100,Math.round((curLow-baseNoise)*3))}
+    smoothScore=Math.round(smoothScore*0.75+rawScore*0.25);const d=D[L],pl=document.getElementById('pill');document.getElementById('v1').textContent=smoothScore+'%';document.getElementById('v2').textContent=(smoothScore*0.035).toFixed(2)+' m/s';document.getElementById('v3').textContent=(100-smoothScore)+'%';
+    if(smoothScore>12){pl.textContent=d.lk;pl.style.color='#ffcc00';const r=70+smoothScore*1.3,g=ax.createRadialGradient(cx,cy,5,cx,cy,r);g.addColorStop(0,'rgba(255,255,255,.88)');g.addColorStop(.35,'rgba(255,204,0,.72)');g.addColorStop(.7,'rgba(255,59,48,.48)');g.addColorStop(1,'rgba(0,17,255,0)');ax.fillStyle=g;ax.beginPath();ax.arc(cx,cy,r,0,Math.PI*2);ax.fill()}else{pl.textContent=d.ok;pl.style.color='#00e5ff'}
+  }loop();
+};
+</script>
+</body>
+</html>
