@@ -4,20 +4,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Node & Java
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: Generate Keystore
-        run: |
-          keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
-      - name: Build AAB
+      - name: Generate Keystore & Install Bubblewrap SDK
         run: |
           npm i -g @bubblewrap/cli
+          (while true; do echo "y"; sleep 2; done) | bubblewrap doctor || true
+          "$HOME/.bubblewrap/jdk/"*/bin/keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
+      - name: Build AAB
+        run: |
           mkdir twa && cd twa
           cat << 'EOF' > twa-manifest.json
           {
@@ -53,7 +50,7 @@ jobs:
             "orientation": "portrait"
           }
           EOF
-          (echo "y"; echo "y"; echo "y"; echo "Thermo2026"; echo "Thermo2026") | bubblewrap build --skipPwaValidation
+          (sleep 3; echo "Thermo2026"; sleep 2; echo "Thermo2026") | bubblewrap build --skipPwaValidation
       - name: Upload AAB and Keystore
         uses: actions/upload-artifact@v4
         with:
@@ -61,3 +58,4 @@ jobs:
           path: |
             twa/app-release-bundle.aab
             release.keystore
+            
