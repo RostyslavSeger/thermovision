@@ -17,18 +17,18 @@ jobs:
         run: |
           mkdir -p twa/src/main/res/values twa/src/main/res/drawable
           cd twa
-          curl -sL "https://github.io" -o src/main/res/drawable/ic_launcher.png
+          curl -sL "https://rostyslavseger.github.io/thermovision/icon-512.png" -o src/main/res/drawable/ic_launcher.png
 
           cat << 'EOF' > src/main/res/values/strings.xml
           <resources>
               <string name="app_name">ThermoVision PRO</string>
               <string name="launcher_name">ThermoVision</string>
-              <string name="asset_statements">[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "web", "site": "https://github.io"}}]</string>
+              <string name="asset_statements">[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "web", "site": "https://rostyslavseger.github.io"}}]</string>
           </resources>
           EOF
 
           cat << 'EOF' > src/main/AndroidManifest.xml
-          <manifest xmlns:android="http://android.com">
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
               <application
                   android:allowBackup="true"
                   android:icon="@drawable/ic_launcher"
@@ -44,7 +44,7 @@ jobs:
                       android:label="@string/launcher_name">
                       <meta-data
                           android:name="android.support.customtabs.trusted.DEFAULT_URL"
-                          android:value="https://github.io/thermovision/" />
+                          android:value="https://rostyslavseger.github.io/thermovision/" />
                       <meta-data
                           android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
                           android:resource="@android:color/black" />
