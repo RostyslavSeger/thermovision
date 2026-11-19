@@ -12,16 +12,18 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
       - name: Configure Bubblewrap & Keystore
         run: |
           mkdir -p ~/.bubblewrap
           cat << EOF > ~/.bubblewrap/config.json
           {
             "jdkPath": "$JAVA_HOME",
-            "androidSdkPath": "$ANDROID_HOME"
+            "androidSdkPath": "$ANDROID_SDK_ROOT"
           }
           EOF
-          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+          yes | sdkmanager --licenses || true
           keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
       - name: Build AAB
         run: |
