@@ -96,10 +96,10 @@ jobs:
           }
           apply plugin: 'com.android.application'
           android {
-              namespace 'io.github.rostyslavseger.thermovisionpro'
+              namespace 'io.github.rostyslavseger.tvpro'
               compileSdk 35
               defaultConfig {
-                  applicationId "io.github.rostyslavseger.thermovisionpro"
+                  applicationId "io.github.rostyslavseger.tvpro"
                   minSdk 24
                   targetSdk 35
                   versionCode 1
