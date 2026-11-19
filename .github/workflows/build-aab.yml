@@ -5,17 +5,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Setup Node
+      - name: Setup Node & Java
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install Tools & Keystore
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Install Bubblewrap SDK & Keystore
         run: |
-          sudo apt-get update && sudo apt-get install -y expect
           npm i -g @bubblewrap/cli
           yes | bubblewrap doctor || true
-          "$HOME/.bubblewrap/jdk/"*/bin/keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
-      - name: Init & Build AAB
+          keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
+      - name: Generate Project & Compile AAB
         run: |
           mkdir twa && cd twa
           cat << 'EOF' > twa-manifest.json
@@ -52,31 +55,19 @@ jobs:
             "orientation": "portrait"
           }
           EOF
-          expect -c '
-            set timeout 600
-            spawn bubblewrap update --skipPwaValidation
-            expect {
-              "versionName" { send "1.0.0\r"; exp_continue }
-              "regenerate" { send "Y\r"; exp_continue }
-              eof
-            }
-          '
-          expect -c '
-            set timeout 600
-            spawn bubblewrap build --skipPwaValidation
-            expect {
-              "regenerate" { send "Y\r"; exp_continue }
-              "Key Store password" { send "Thermo2026\r"; exp_continue }
-              "Key password" { send "Thermo2026\r"; exp_continue }
-              eof
-            }
-          '
-          find .. -name "*.aab"
+          yes "1.0.0" | bubblewrap update --skipPwaValidation || true
+          sed -i 's|https://github.io|https://github.io|g' app/build.gradle || true
+          chmod +x gradlew
+          ./gradlew bundleRelease \
+            -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/release.keystore" \
+            -Pandroid.injected.signing.store.password="Thermo2026" \
+            -Pandroid.injected.signing.key.alias="tvkey" \
+            -Pandroid.injected.signing.key.password="Thermo2026"
       - name: Upload AAB and Keystore
         uses: actions/upload-artifact@v4
         with:
           name: ThermoVision-PlayStore-Bundle
           if-no-files-found: error
           path: |
-            **/*.aab
+            twa/app/build/outputs/bundle/release/app-release.aab
             release.keystore
