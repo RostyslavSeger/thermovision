@@ -1,0 +1,56 @@
+name: Build Android AAB
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Generate Keystore
+        run: |
+          keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
+      - name: Build AAB via Bubblewrap
+        run: |
+          npm i -g @bubblewrap/cli
+          bubblewrap init --manifest="https://github.io" --directory="./twa" <<EOF
+          rostyslavseger.github.io
+          /thermovision/
+          ThermoVision PRO
+          ThermoVision
+          io.github.rostyslavseger.thermovisionpro
+          1
+          1.0.0
+          #05070e
+          #05070e
+          #05070e
+          https://github.io
+          https://github.io
+
+          false
+          true
+
+
+
+          false
+
+
+
+          release.keystore
+          tvkey
+          EOF
+          cd twa
+          echo "Thermo2026" | echo "Thermo2026" | bubblewrap build --skipPwaValidation
+      - name: Upload AAB and Keystore
+        uses: actions/upload-artifact@v4
+        with:
+          name: ThermoVision-PlayStore-Bundle
+          path: |
+            twa/app-release-bundle.aab
+            release.keystore
