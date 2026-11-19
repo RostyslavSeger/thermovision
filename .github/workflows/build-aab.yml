@@ -13,12 +13,62 @@ jobs:
       - name: Generate Keystore
         run: |
           keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
-      - name: Clone Official Google TWA Template & Build AAB
+      - name: Build Standalone TWA AAB
         run: |
-          git clone --depth 1 https://github.com helper
-          cp -r helper/demos/twa-basic twa
+          mkdir -p twa/src/main/res/values twa/src/main/res/drawable
           cd twa
-          curl -sL https://github.io -o src/main/res/drawable/ic_launcher.png || true
+          curl -sL "https://github.io" -o src/main/res/drawable/ic_launcher.png
+
+          cat << 'EOF' > src/main/res/values/strings.xml
+          <resources>
+              <string name="app_name">ThermoVision PRO</string>
+              <string name="launcher_name">ThermoVision</string>
+              <string name="asset_statements">[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "web", "site": "https://github.io"}}]</string>
+          </resources>
+          EOF
+
+          cat << 'EOF' > src/main/AndroidManifest.xml
+          <manifest xmlns:android="http://android.com">
+              <application
+                  android:allowBackup="true"
+                  android:icon="@drawable/ic_launcher"
+                  android:label="@string/app_name"
+                  android:supportsRtl="true"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar">
+                  <meta-data
+                      android:name="asset_statements"
+                      android:value="@string/asset_statements" />
+                  <activity
+                      android:name="com.google.androidbrowserhelper.trusted.LauncherActivity"
+                      android:exported="true"
+                      android:label="@string/launcher_name">
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.DEFAULT_URL"
+                          android:value="https://github.io/thermovision/" />
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
+                          android:resource="@android:color/black" />
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR"
+                          android:resource="@android:color/black" />
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                      <intent-filter android:autoVerify="true">
+                          <action android:name="android.intent.action.VIEW" />
+                          <category android:name="android.intent.category.DEFAULT" />
+                          <category android:name="android.intent.category.BROWSABLE" />
+                          <data
+                              android:scheme="https"
+                              android:host="rostyslavseger.github.io"
+                              android:pathPrefix="/thermovision" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          EOF
+
           cat << 'EOF' > build.gradle
           buildscript {
               repositories {
@@ -45,14 +95,6 @@ jobs:
                   targetSdk 34
                   versionCode 1
                   versionName "1.0.0"
-                  manifestPlaceholders = [
-                      hostName: "rostyslavseger.github.io",
-                      defaultUrl: "https://github.io",
-                      launcherName: "ThermoVision",
-                      assetStatements: '[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "web", "site": "https://github.io"}}]',
-                      webManifestUrl: "https://github.iomanifest.json",
-                      twaManifestUrl: "https://github.iomanifest.json"
-                  ]
               }
               buildTypes {
                   release {
@@ -68,12 +110,14 @@ jobs:
               implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0'
           }
           EOF
+
           gradle wrapper --gradle-version 8.5
           ./gradlew bundleRelease \
             -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/release.keystore" \
             -Pandroid.injected.signing.store.password="Thermo2026" \
             -Pandroid.injected.signing.key.alias="tvkey" \
             -Pandroid.injected.signing.key.password="Thermo2026"
+
       - name: Upload AAB and Keystore
         uses: actions/upload-artifact@v4
         with:
