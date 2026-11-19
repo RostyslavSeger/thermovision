@@ -12,11 +12,16 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Configure Bubblewrap & Keystore
+      - name: Install Android Commandline Tools & Keystore
         run: |
-          mkdir -p ~/.bubblewrap
-          printf '{"jdkPath":"%s","androidSdkPath":"/usr/local/lib/android/sdk"}' "$JAVA_HOME" > ~/.bubblewrap/config.json
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          mkdir -p "$HOME/android-sdk/cmdline-tools"
+          curl -sL https://google.com -o cmdtools.zip
+          unzip -q cmdtools.zip -d "$HOME/android-sdk/cmdline-tools"
+          mv "$HOME/android-sdk/cmdline-tools/cmdline-tools" "$HOME/android-sdk/cmdline-tools/latest"
+          yes | "$HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null
+          "$HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "build-tools;34.0.0" "platforms;android-34" > /dev/null
+          mkdir -p "$HOME/.bubblewrap"
+          printf '{"jdkPath":"%s","androidSdkPath":"%s/android-sdk"}' "$JAVA_HOME" "$HOME" > "$HOME/.bubblewrap/config.json"
           keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
       - name: Build AAB
         run: |
