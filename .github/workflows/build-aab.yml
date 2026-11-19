@@ -4,49 +4,65 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Node
+      - name: Setup Node & Java
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Generate Keystore
+      - name: Configure Bubblewrap & Keystore
         run: |
+          mkdir -p ~/.bubblewrap
+          cat << EOF > ~/.bubblewrap/config.json
+          {
+            "jdkPath": "$JAVA_HOME",
+            "androidSdkPath": "$ANDROID_HOME"
+          }
+          EOF
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
           keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
-      - name: Build AAB via Bubblewrap
+      - name: Build AAB
         run: |
           npm i -g @bubblewrap/cli
-          bubblewrap init --manifest="https://github.io" --directory="./twa" <<EOF
-          rostyslavseger.github.io
-          /thermovision/
-          ThermoVision PRO
-          ThermoVision
-          io.github.rostyslavseger.thermovisionpro
-          1
-          1.0.0
-          #05070e
-          #05070e
-          #05070e
-          https://github.io
-          https://github.io
-
-          false
-          true
-
-
-
-          false
-
-
-
-          release.keystore
-          tvkey
+          mkdir twa && cd twa
+          cat << 'EOF' > twa-manifest.json
+          {
+            "packageId": "io.github.rostyslavseger.thermovisionpro",
+            "host": "rostyslavseger.github.io",
+            "name": "ThermoVision PRO",
+            "launcherName": "ThermoVision",
+            "display": "standalone",
+            "themeColor": "#05070e",
+            "navigationColor": "#05070e",
+            "backgroundColor": "#05070e",
+            "enableNotifications": false,
+            "startUrl": "/thermovision/",
+            "iconUrl": "https://github.io",
+            "maskableIconUrl": "https://github.io",
+            "splashScreenFadeOutDuration": 300,
+            "signingKey": {
+              "path": "../release.keystore",
+              "alias": "tvkey"
+            },
+            "appVersionCode": 1,
+            "appVersionName": "1.0.0",
+            "shortcuts": [],
+            "generatorApp": "bubblewrap-cli",
+            "webManifestUrl": "https://github.io",
+            "fallbackType": "customtabs",
+            "features": {},
+            "alphaDependencies": {
+              "enabled": false
+            },
+            "enableSiteSettingsShortcut": true,
+            "isChromeOSOnly": false,
+            "orientation": "portrait"
+          }
           EOF
-          cd twa
-          echo "Thermo2026" | echo "Thermo2026" | bubblewrap build --skipPwaValidation
+          bubblewrap update --skipPwaValidation
+          printf "Thermo2026\nThermo2026\n" | bubblewrap build --skipPwaValidation
       - name: Upload AAB and Keystore
         uses: actions/upload-artifact@v4
         with:
