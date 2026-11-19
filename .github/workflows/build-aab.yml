@@ -3,7 +3,7 @@ on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -15,7 +15,7 @@ jobs:
           npm i -g @bubblewrap/cli
           yes | bubblewrap doctor || true
           "$HOME/.bubblewrap/jdk/"*/bin/keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
-      - name: Build AAB
+      - name: Init & Build AAB
         run: |
           mkdir twa && cd twa
           cat << 'EOF' > twa-manifest.json
@@ -53,19 +53,30 @@ jobs:
           }
           EOF
           expect -c '
-            set timeout 300
+            set timeout 600
+            spawn bubblewrap update --skipPwaValidation
+            expect {
+              "versionName" { send "1.0.0\r"; exp_continue }
+              "regenerate" { send "Y\r"; exp_continue }
+              eof
+            }
+          '
+          expect -c '
+            set timeout 600
             spawn bubblewrap build --skipPwaValidation
             expect {
-              "regenerate your project" { send "Y\r"; exp_continue }
+              "regenerate" { send "Y\r"; exp_continue }
               "Key Store password" { send "Thermo2026\r"; exp_continue }
               "Key password" { send "Thermo2026\r"; exp_continue }
               eof
             }
           '
+          find .. -name "*.aab"
       - name: Upload AAB and Keystore
         uses: actions/upload-artifact@v4
         with:
           name: ThermoVision-PlayStore-Bundle
+          if-no-files-found: error
           path: |
-            twa/app-release-bundle.aab
+            **/*.aab
             release.keystore
