@@ -9,8 +9,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install Bubblewrap SDK & Keystore
+      - name: Install Tools & Keystore
         run: |
+          sudo apt-get update && sudo apt-get install -y expect
           npm i -g @bubblewrap/cli
           yes | bubblewrap doctor || true
           "$HOME/.bubblewrap/jdk/"*/bin/keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
@@ -51,7 +52,16 @@ jobs:
             "orientation": "portrait"
           }
           EOF
-          printf "Y\nThermo2026\nThermo2026\n" | bubblewrap build --skipPwaValidation
+          expect -c '
+            set timeout 300
+            spawn bubblewrap build --skipPwaValidation
+            expect {
+              "regenerate your project" { send "Y\r"; exp_continue }
+              "Key Store password" { send "Thermo2026\r"; exp_continue }
+              "Key password" { send "Thermo2026\r"; exp_continue }
+              eof
+            }
+          '
       - name: Upload AAB and Keystore
         uses: actions/upload-artifact@v4
         with:
@@ -59,4 +69,3 @@ jobs:
           path: |
             twa/app-release-bundle.aab
             release.keystore
-            
