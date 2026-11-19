@@ -51,7 +51,7 @@ jobs:
             "orientation": "portrait"
           }
           EOF
-          printf "Thermo2026\nThermo2026\n" | bubblewrap build --skipPwaValidation
+          printf "Y\nThermo2026\nThermo2026\n" | bubblewrap build --skipPwaValidation
       - name: Upload AAB and Keystore
         uses: actions/upload-artifact@v4
         with:
