@@ -5,19 +5,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Generate Fresh Keystore
-        run: |
-          keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
       - name: Build Standalone TWA AAB
         run: |
           mkdir -p twa/src/main/res/values twa/src/main/res/drawable
           cd twa
-          curl -sL "https://rostyslavseger.github.io/thermovision/icon-512.png" -o src/main/res/drawable/ic_launcher.png
+          curl -sL "https://github.io" -o src/main/res/drawable/ic_launcher.png
 
           cat << 'EOF' > gradle.properties
           android.useAndroidX=true
@@ -33,12 +32,12 @@ jobs:
           <resources>
               <string name="app_name">ThermoVision PRO</string>
               <string name="launcher_name">ThermoVision</string>
-              <string name="asset_statements">[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "web", "site": "https://rostyslavseger.github.io"}}]</string>
+              <string name="asset_statements">[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "web", "site": "https://github.io"}}]</string>
           </resources>
           EOF
 
           cat << 'EOF' > src/main/AndroidManifest.xml
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+          <manifest xmlns:android="http://android.com">
               <application
                   android:allowBackup="true"
                   android:icon="@drawable/ic_launcher"
@@ -54,7 +53,7 @@ jobs:
                       android:label="@string/launcher_name">
                       <meta-data
                           android:name="android.support.customtabs.trusted.DEFAULT_URL"
-                          android:value="https://rostyslavseger.github.io/thermovision/" />
+                          android:value="https://github.io/thermovision/" />
                       <meta-data
                           android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
                           android:resource="@android:color/black" />
@@ -86,7 +85,7 @@ jobs:
                   mavenCentral()
               }
               dependencies {
-                  classpath 'com.android.tools.build:gradle:8.5.2'
+                  classpath 'com.android.tools.build:gradle:8.9.1'
               }
           }
           allprojects {
@@ -98,13 +97,13 @@ jobs:
           apply plugin: 'com.android.application'
           android {
               namespace 'io.github.rostyslavseger.tvapp'
-              compileSdk 35
+              compileSdk 36
               defaultConfig {
                   applicationId "io.github.rostyslavseger.tvapp"
                   minSdk 24
-                  targetSdk 35
-                  versionCode 1
-                  versionName "1.0.0"
+                  targetSdk 36
+                  versionCode 2
+                  versionName "1.0.1"
               }
               buildTypes {
                   release {
@@ -121,18 +120,16 @@ jobs:
           }
           EOF
 
-          gradle wrapper --gradle-version 8.7
+          gradle wrapper --gradle-version 8.11.1
           ./gradlew bundleRelease \
             -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/release.keystore" \
             -Pandroid.injected.signing.store.password="Thermo2026" \
             -Pandroid.injected.signing.key.alias="tvkey" \
             -Pandroid.injected.signing.key.password="Thermo2026"
 
-      - name: Upload AAB and Keystore
+      - name: Upload Signed AAB
         uses: actions/upload-artifact@v4
         with:
-          name: ThermoVision-PlayStore-Bundle
+          name: ThermoVision-PlayStore-Bundle-v2
           if-no-files-found: error
-          path: |
-            twa/build/outputs/bundle/release/twa-release.aab
-            release.keystore
+          path: twa/build/outputs/bundle/release/twa-release.aab
