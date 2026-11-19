@@ -5,14 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Generate Keystore
-        run: |
-          keytool -genkeypair -v -keystore release.keystore -alias tvkey -keyalg RSA -keysize 2048 -validity 10000 -storepass Thermo2026 -keypass Thermo2026 -dname "CN=Rostyslav Zeger, OU=Dev, O=ThermoVision, L=Leutershausen, S=Bavaria, C=DE"
       - name: Build Standalone TWA AAB
         run: |
           mkdir -p twa/src/main/res/values twa/src/main/res/drawable
@@ -123,16 +122,14 @@ jobs:
 
           gradle wrapper --gradle-version 8.7
           ./gradlew bundleRelease \
-            -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/release.keystore" \
-            -Pandroid.injected.signing.store.password="Thermo2026" \
-            -Pandroid.injected.signing.key.alias="tvkey" \
-            -Pandroid.injected.signing.key.password="Thermo2026"
+            -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/signing.keystore" \
+            -Pandroid.injected.signing.store.password="XTz3NiqvaBFB" \
+            -Pandroid.injected.signing.key.alias="my-key-alias" \
+            -Pandroid.injected.signing.key.password="XTz3NiqvaBFB"
 
-      - name: Upload AAB and Keystore
+      - name: Upload Signed AAB
         uses: actions/upload-artifact@v4
         with:
           name: ThermoVision-PlayStore-Bundle
           if-no-files-found: error
-          path: |
-            twa/build/outputs/bundle/release/twa-release.aab
-            release.keystore
+          path: twa/build/outputs/bundle/release/twa-release.aab
