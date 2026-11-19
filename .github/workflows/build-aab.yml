@@ -19,6 +19,16 @@ jobs:
           cd twa
           curl -sL "https://rostyslavseger.github.io/thermovision/icon-512.png" -o src/main/res/drawable/ic_launcher.png
 
+          cat << 'EOF' > gradle.properties
+          android.useAndroidX=true
+          android.enableJetifier=true
+          org.gradle.jvmargs=-Xmx2048m
+          EOF
+
+          cat << 'EOF' > settings.gradle
+          rootProject.name = "twa"
+          EOF
+
           cat << 'EOF' > src/main/res/values/strings.xml
           <resources>
               <string name="app_name">ThermoVision PRO</string>
@@ -76,7 +86,7 @@ jobs:
                   mavenCentral()
               }
               dependencies {
-                  classpath 'com.android.tools.build:gradle:8.2.2'
+                  classpath 'com.android.tools.build:gradle:8.5.2'
               }
           }
           allprojects {
@@ -88,11 +98,11 @@ jobs:
           apply plugin: 'com.android.application'
           android {
               namespace 'io.github.rostyslavseger.thermovisionpro'
-              compileSdk 34
+              compileSdk 35
               defaultConfig {
                   applicationId "io.github.rostyslavseger.thermovisionpro"
                   minSdk 21
-                  targetSdk 34
+                  targetSdk 35
                   versionCode 1
                   versionName "1.0.0"
               }
@@ -111,7 +121,7 @@ jobs:
           }
           EOF
 
-          gradle wrapper --gradle-version 8.5
+          gradle wrapper --gradle-version 8.7
           ./gradlew bundleRelease \
             -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/release.keystore" \
             -Pandroid.injected.signing.store.password="Thermo2026" \
