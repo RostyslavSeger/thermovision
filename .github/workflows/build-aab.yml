@@ -19,8 +19,20 @@ jobs:
             exit 1
           fi
           mkdir -p twa/src/main/res/values twa/src/main/res/drawable
+          python3 -c '
+          from PIL import Image, ImageDraw
+          import os
+          src = "icon-512.png"
+          dst = "twa/src/main/res/drawable/ic_launcher.png"
+          if os.path.exists(src):
+              im = Image.open(src).convert("RGBA").resize((512, 512))
+          else:
+              im = Image.new("RGBA", (512, 512), (255, 85, 0, 255))
+              d = ImageDraw.Draw(im)
+              d.ellipse((96, 96, 416, 416), fill=(255, 200, 0, 255))
+          im.save(dst, "PNG")
+          '
           cd twa
-          curl -sL "https://github.io" -o src/main/res/drawable/ic_launcher.png
 
           cat << 'EOF' > gradle.properties
           android.useAndroidX=true
@@ -115,8 +127,8 @@ jobs:
                   }
               }
               compileOptions {
-                  sourceCompatibility JavaVersion.VERSION_21
-                  targetCompatibility JavaVersion.VERSION_21
+                  sourceCompatibility JavaVersion.VERSION_17
+                  targetCompatibility JavaVersion.VERSION_17
               }
           }
           dependencies {
