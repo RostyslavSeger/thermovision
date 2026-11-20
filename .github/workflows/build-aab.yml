@@ -20,13 +20,63 @@ jobs:
           fi
           mkdir -p twa/src/main/res/values twa/src/main/res/drawable
           python3 -c '
-          import zlib, struct
+          import zlib, struct, xml.etree.ElementTree as ET
+
           w, h = 512, 512
           raw = b"".join(b"\x00" + b"\xff\x55\x00\xff" * w for _ in range(h))
           def chunk(t, d):
               return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
           png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
           open("twa/src/main/res/drawable/ic_launcher.png", "wb").write(png)
+
+          ns = "http://android.com"
+          ET.register_namespace("android", ns)
+          A = lambda k: f"{{{ns}}}{k}"
+
+          manifest = ET.Element("manifest")
+          app = ET.SubElement(manifest, "application", {
+              A("allowBackup"): "true",
+              A("icon"): "@drawable/ic_launcher",
+              A("label"): "ThermoVision PRO",
+              A("supportsRtl"): "true",
+              A("theme"): "@android:style/Theme.Translucent.NoTitleBar"
+          })
+          ET.SubElement(app, "meta-data", {
+              A("name"): "asset_statements",
+              A("value"): "[{\"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://github.io\"}}]"
+          })
+          act = ET.SubElement(app, "activity", {
+              A("name"): "com.google.androidbrowserhelper.trusted.LauncherActivity",
+              A("exported"): "true",
+              A("label"): "ThermoVision"
+          })
+          ET.SubElement(act, "meta-data", {
+              A("name"): "android.support.customtabs.trusted.DEFAULT_URL",
+              A("value"): "https://github.io/thermovision/"
+          })
+          ET.SubElement(act, "meta-data", {
+              A("name"): "android.support.customtabs.trusted.STATUS_BAR_COLOR",
+              A("value"): "#05070e"
+          })
+          ET.SubElement(act, "meta-data", {
+              A("name"): "android.support.customtabs.trusted.NAVIGATION_BAR_COLOR",
+              A("value"): "#05070e"
+          })
+          if1 = ET.SubElement(act, "intent-filter")
+          ET.SubElement(if1, "action", {A("name"): "android.intent.action.MAIN"})
+          ET.SubElement(if1, "category", {A("name"): "android.intent.category.LAUNCHER"})
+
+          if2 = ET.SubElement(act, "intent-filter", {A("autoVerify"): "true"})
+          ET.SubElement(if2, "action", {A("name"): "android.intent.action.VIEW"})
+          ET.SubElement(if2, "category", {A("name"): "android.intent.category.DEFAULT"})
+          ET.SubElement(if2, "category", {A("name"): "android.intent.category.BROWSABLE"})
+          ET.SubElement(if2, "data", {
+              A("scheme"): "https",
+              A("host"): "rostyslavseger.github.io",
+              A("pathPrefix"): "/thermovision"
+          })
+
+          ET.ElementTree(manifest).write("twa/src/main/AndroidManifest.xml", encoding="utf-8", xml_declaration=True)
           '
           cd twa
 
@@ -39,56 +89,6 @@ jobs:
 
           cat << 'EOF' > settings.gradle
           rootProject.name = "twa"
-          EOF
-
-          cat << 'EOF' > src/main/res/values/strings.xml
-          <resources>
-              <string name="app_name">ThermoVision PRO</string>
-              <string name="launcher_name">ThermoVision</string>
-              <string name="asset_statements">[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "web", "site": "https://github.io"}}]</string>
-          </resources>
-          EOF
-
-          cat << 'EOF' > src/main/AndroidManifest.xml
-          <manifest xmlns:android="http://android.com">
-              <application
-                  android:allowBackup="true"
-                  android:icon="@drawable/ic_launcher"
-                  android:label="@string/app_name"
-                  android:supportsRtl="true"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar">
-                  <meta-data
-                      android:name="asset_statements"
-                      android:value="@string/asset_statements" />
-                  <activity
-                      android:name="com.google.androidbrowserhelper.trusted.LauncherActivity"
-                      android:exported="true"
-                      android:label="@string/launcher_name">
-                      <meta-data
-                          android:name="android.support.customtabs.trusted.DEFAULT_URL"
-                          android:value="https://github.io/thermovision/" />
-                      <meta-data
-                          android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
-                          android:resource="@android:color/black" />
-                      <meta-data
-                          android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR"
-                          android:resource="@android:color/black" />
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                      <intent-filter android:autoVerify="true">
-                          <action android:name="android.intent.action.VIEW" />
-                          <category android:name="android.intent.category.DEFAULT" />
-                          <category android:name="android.intent.category.BROWSABLE" />
-                          <data
-                              android:scheme="https"
-                              android:host="rostyslavseger.github.io"
-                              android:pathPrefix="/thermovision" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
           EOF
 
           cat << 'EOF' > build.gradle
@@ -146,4 +146,3 @@ jobs:
           name: ThermoVision-PlayStore-Bundle-v2
           if-no-files-found: error
           path: twa/build/outputs/bundle/release/twa-release.aab
-          
