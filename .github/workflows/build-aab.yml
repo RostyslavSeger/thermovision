@@ -18,67 +18,23 @@ jobs:
             echo "ERROR: release.keystore NOT FOUND in repository root!"
             exit 1
           fi
-          mkdir -p twa/src/main/res/values twa/src/main/res/drawable
-          python3 -c '
-          import zlib, struct, xml.etree.ElementTree as ET
 
+          git clone --depth 1 https://github.com helper
+          cp -r helper/demos/twa-basic twa
+          cd twa
+
+          python3 -c '
+          import zlib, struct
           w, h = 512, 512
           raw = b"".join(b"\x00" + b"\xff\x55\x00\xff" * w for _ in range(h))
           def chunk(t, d):
               return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
           png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
-          open("twa/src/main/res/drawable/ic_launcher.png", "wb").write(png)
-
-          ns = "http://android.com"
-          ET.register_namespace("android", ns)
-          A = lambda k: f"{{{ns}}}{k}"
-
-          manifest = ET.Element("manifest")
-          app = ET.SubElement(manifest, "application", {
-              A("allowBackup"): "true",
-              A("icon"): "@drawable/ic_launcher",
-              A("label"): "ThermoVision PRO",
-              A("supportsRtl"): "true",
-              A("theme"): "@android:style/Theme.Translucent.NoTitleBar"
-          })
-          ET.SubElement(app, "meta-data", {
-              A("name"): "asset_statements",
-              A("value"): "[{\"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://github.io\"}}]"
-          })
-          act = ET.SubElement(app, "activity", {
-              A("name"): "com.google.androidbrowserhelper.trusted.LauncherActivity",
-              A("exported"): "true",
-              A("label"): "ThermoVision"
-          })
-          ET.SubElement(act, "meta-data", {
-              A("name"): "android.support.customtabs.trusted.DEFAULT_URL",
-              A("value"): "https://github.io/thermovision/"
-          })
-          ET.SubElement(act, "meta-data", {
-              A("name"): "android.support.customtabs.trusted.STATUS_BAR_COLOR",
-              A("value"): "#05070e"
-          })
-          ET.SubElement(act, "meta-data", {
-              A("name"): "android.support.customtabs.trusted.NAVIGATION_BAR_COLOR",
-              A("value"): "#05070e"
-          })
-          if1 = ET.SubElement(act, "intent-filter")
-          ET.SubElement(if1, "action", {A("name"): "android.intent.action.MAIN"})
-          ET.SubElement(if1, "category", {A("name"): "android.intent.category.LAUNCHER"})
-
-          if2 = ET.SubElement(act, "intent-filter", {A("autoVerify"): "true"})
-          ET.SubElement(if2, "action", {A("name"): "android.intent.action.VIEW"})
-          ET.SubElement(if2, "category", {A("name"): "android.intent.category.DEFAULT"})
-          ET.SubElement(if2, "category", {A("name"): "android.intent.category.BROWSABLE"})
-          ET.SubElement(if2, "data", {
-              A("scheme"): "https",
-              A("host"): "rostyslavseger.github.io",
-              A("pathPrefix"): "/thermovision"
-          })
-
-          ET.ElementTree(manifest).write("twa/src/main/AndroidManifest.xml", encoding="utf-8", xml_declaration=True)
+          for p in ["src/main/res/drawable/ic_launcher.png", "src/main/res/mipmap-xxxhdpi/ic_launcher.png"]:
+              import os
+              os.makedirs(os.path.dirname(p), exist_ok=True)
+              open(p, "wb").write(png)
           '
-          cd twa
 
           cat << 'EOF' > gradle.properties
           android.useAndroidX=true
@@ -117,6 +73,18 @@ jobs:
                   targetSdk 36
                   versionCode 2
                   versionName "1.0.1"
+                  manifestPlaceholders = [
+                      hostName: "rostyslavseger.github.io",
+                      defaultUrl: "https://github.io",
+                      launcherName: "ThermoVision",
+                      assetStatements: '[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "web", "site": "https://github.io"}}]',
+                      webManifestUrl: "https://github.iomanifest.json",
+                      twaManifestUrl: "https://github.iomanifest.json",
+                      statusBarColor: "#05070e",
+                      navigationColor: "#05070e",
+                      backgroundColor: "#05070e",
+                      splashScreenFadeOutDuration: "300"
+                  ]
               }
               buildTypes {
                   release {
@@ -146,3 +114,4 @@ jobs:
           name: ThermoVision-PlayStore-Bundle-v2
           if-no-files-found: error
           path: twa/build/outputs/bundle/release/twa-release.aab
+          
