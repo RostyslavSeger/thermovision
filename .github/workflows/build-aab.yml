@@ -23,79 +23,43 @@ jobs:
           cd twa
 
           python3 -c '
-          import zlib, struct, xml.dom.minidom as md
-
+          import zlib, struct
           w, h = 512, 512
           raw = b"".join(b"\x00" + b"\xff\x55\x00\xff" * w for _ in range(h))
           def chunk(t, d):
               return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
           png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
           open("src/main/res/drawable/ic_launcher.png", "wb").write(png)
-
-          C = chr(58)
-          A = lambda k: "android" + C + k
-
-          doc = md.Document()
-          m = doc.createElement("manifest")
-          m.setAttribute("xmlns" + C + "android", "http://android.com")
-          doc.appendChild(m)
-
-          app = doc.createElement("application")
-          app.setAttribute(A("allowBackup"), "true")
-          app.setAttribute(A("icon"), "@drawable/ic_launcher")
-          app.setAttribute(A("label"), "ThermoVision PRO")
-          app.setAttribute(A("supportsRtl"), "true")
-          app.setAttribute(A("theme"), "@android" + C + "style/Theme.Translucent.NoTitleBar")
-          m.appendChild(app)
-
-          md1 = doc.createElement("meta-data")
-          md1.setAttribute(A("name"), "asset_statements")
-          md1.setAttribute(A("value"), "[{\"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://github.io\"}}]")
-          app.appendChild(md1)
-
-          act = doc.createElement("activity")
-          act.setAttribute(A("name"), "com.google.androidbrowserhelper.trusted.LauncherActivity")
-          act.setAttribute(A("exported"), "true")
-          act.setAttribute(A("label"), "ThermoVision")
-          app.appendChild(act)
-
-          for k, v in [
-              ("android.support.customtabs.trusted.DEFAULT_URL", "https://github.io/thermovision/"),
-              ("android.support.customtabs.trusted.STATUS_BAR_COLOR", "#05070e"),
-              ("android.support.customtabs.trusted.NAVIGATION_BAR_COLOR", "#05070e")
-          ]:
-              el = doc.createElement("meta-data")
-              el.setAttribute(A("name"), k)
-              el.setAttribute(A("value"), v)
-              act.appendChild(el)
-
-          if1 = doc.createElement("intent-filter")
-          a1 = doc.createElement("action")
-          a1.setAttribute(A("name"), "android.intent.action.MAIN")
-          c1 = doc.createElement("category")
-          c1.setAttribute(A("name"), "android.intent.category.LAUNCHER")
-          if1.appendChild(a1)
-          if1.appendChild(c1)
-          act.appendChild(if1)
-
-          if2 = doc.createElement("intent-filter")
-          if2.setAttribute(A("autoVerify"), "true")
-          a2 = doc.createElement("action")
-          a2.setAttribute(A("name"), "android.intent.action.VIEW")
-          c2 = doc.createElement("category")
-          c2.setAttribute(A("name"), "android.intent.category.DEFAULT")
-          c3 = doc.createElement("category")
-          c3.setAttribute(A("name"), "android.intent.category.BROWSABLE")
-          d1 = doc.createElement("data")
-          d1.setAttribute(A("scheme"), "https")
-          d1.setAttribute(A("host"), "rostyslavseger.github.io")
-          d1.setAttribute(A("pathPrefix"), "/thermovision")
-          for x in (a2, c2, c3, d1):
-              if2.appendChild(x)
-          act.appendChild(if2)
-
-          open("src/main/AndroidManifest.xml", "wb").write(doc.toprettyxml(encoding="utf-8"))
           '
+
+          echo "PG1hbmlmZXN0IHhtbG5zOmFuZHJvaWQ9Imh0dHA6Ly9zY2hlbWFzLmFuZHJvaWQuY29tL2Fw" > m.b64
+          echo "ay9yZXMvYW5kcm9pZCI+PGFwcGxpY2F0aW9uIGFuZHJvaWQ6YWxsb3dCYWNrdXA9InRydWUi" >> m.b64
+          echo "IGFuZHJvaWQ6aWNvbj0iQGRyYXdhYmxlL2ljX2xhdW5jaGVyIiBhbmRyb2lkOmxhYmVsPSJU" >> m.b64
+          echo "aGVybW9WaXNpb24gUFJPIiBhbmRyb2lkOnN1cHBvcnRzUnRsPSJ0cnVlIiBhbmRyb2lkOnRo" >> m.b64
+          echo "ZW1lPSJAYW5kcm9pZDpzdHlsZS9UaGVtZS5UcmFuc2x1Y2VudC5Ob1RpdGxlQmFyIj48bWV0" >> m.b64
+          echo "YS1kYXRhIGFuZHJvaWQ6bmFtZT0iYXNzZXRfc3RhdGVtZW50cyIgYW5kcm9pZDp2YWx1ZT0i" >> m.b64
+          echo "W3sncmVsYXRpb24nOiBbJ2RlbGVnYXRlX3Blcm1pc3Npb24vY29tbW9uLmhhbmRsZV9hbGxf" >> m.b64
+          echo "dXJscyddLCAndGFyZ2V0JzogeyduYW1lc3BhY2UnOiAnd2ViJywgJ3NpdGUnOiAnaHR0cHM6" >> m.b64
+          echo "Ly9yb3N0eXNsYXZzZWdlci5naXRodWIuaW8nfX1dIi8+PGFjdGl2aXR5IGFuZHJvaWQ6bmFt" >> m.b64
+          echo "ZT0iY29tLmdvb2dsZS5hbmRyb2lkYnJvd3NlcmhlbHBlci50cnVzdGVkLkxhdW5jaGVyQWN0" >> m.b64
+          echo "aXZpdHkiIGFuZHJvaWQ6ZXhwb3J0ZWQ9InRydWUiIGFuZHJvaWQ6bGFiZWw9IlRoZXJtb1Zp" >> m.b64
+          echo "c2lvbiI+PG1ldGEtZGF0YSBhbmRyb2lkOm5hbWU9ImFuZHJvaWQuc3VwcG9ydC5jdXN0b210" >> m.b64
+          echo "YWJzLnRydXN0ZWQuREVGQVVMVF9VUkwiIGFuZHJvaWQ6dmFsdWU9Imh0dHBzOi8vcm9zdHlz" >> m.b64
+          echo "bGF2c2VnZXIuZ2l0aHViLmlvL3RoZXJtb3Zpc2lvbi8iLz48bWV0YS1kYXRhIGFuZHJvaWQ6" >> m.b64
+          echo "bmFtZT0iYW5kcm9pZC5zdXBwb3J0LmN1c3RvbXRhYnMudHJ1c3RlZC5TVEFUVVNfQkFSX0NP" >> m.b64
+          echo "TE9SIiBhbmRyb2lkOnZhbHVlPSIjMDUwNzBlIi8+PG1ldGEtZGF0YSBhbmRyb2lkOm5hbWU9" >> m.b64
+          echo "ImFuZHJvaWQuc3VwcG9ydC5jdXN0b210YWJzLnRydXN0ZWQuTkFWSUdBVElPTl9CQVJfQ09M" >> m.b64
+          echo "T1IiIGFuZHJvaWQ6dmFsdWU9IiMwNTA3MGUiLz48aW50ZW50LWZpbHRlcj48YWN0aW9uIGFu" >> m.b64
+          echo "ZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuYWN0aW9uLk1BSU4iLz48Y2F0ZWdvcnkgYW5k" >> m.b64
+          echo "cm9pZDpuYW1lPSJhbmRyb2lkLmludGVudC5jYXRlZ29yeS5MQVVOQ0hFUiIvPjwvaW50ZW50" >> m.b64
+          echo "LWZpbHRlcj48aW50ZW50LWZpbHRlciBhbmRyb2lkOmF1dG9WZXJpZnk9InRydWUiPjxhY3Rp" >> m.b64
+          echo "b24gYW5kcm9pZDpuYW1lPSJhbmRyb2lkLmludGVudC5hY3Rpb24uVklFVyIvPjxjYXRlZ29y" >> m.b64
+          echo "eSBhbmRyb2lkOm5hbWU9ImFuZHJvaWQuaW50ZW50LmNhdGVnb3J5LkRFRkFVTFQiLz48Y2F0" >> m.b64
+          echo "ZWdvcnkgYW5kcm9pZDpuYW1lPSJhbmRyb2lkLmludGVudC5jYXRlZ29yeS5CUk9XU0FCTEUi" >> m.b64
+          echo "Lz48ZGF0YSBhbmRyb2lkOnNjaGVtZT0iaHR0cHMiIGFuZHJvaWQ6aG9zdD0icm9zdHlzbGF2" >> m.b64
+          echo "c2VnZXIuZ2l0aHViLmlvIiBhbmRyb2lkOnBhdGhQcmVmaXg9Ii90aGVybW92aXNpb24iLz48" >> m.b64
+          echo "L2ludGVudC1maWx0ZXI+PC9hY3Rpdml0eT48L2FwcGxpY2F0aW9uPjwvbWFuaWZlc3Q+" >> m.b64
+          tr -d '\n' < m.b64 | base64 -d > src/main/AndroidManifest.xml
 
           cat << 'EOF' > gradle.properties
           android.useAndroidX=true
