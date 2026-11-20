@@ -20,17 +20,13 @@ jobs:
           fi
           mkdir -p twa/src/main/res/values twa/src/main/res/drawable
           python3 -c '
-          from PIL import Image, ImageDraw
-          import os
-          src = "icon-512.png"
-          dst = "twa/src/main/res/drawable/ic_launcher.png"
-          if os.path.exists(src):
-              im = Image.open(src).convert("RGBA").resize((512, 512))
-          else:
-              im = Image.new("RGBA", (512, 512), (255, 85, 0, 255))
-              d = ImageDraw.Draw(im)
-              d.ellipse((96, 96, 416, 416), fill=(255, 200, 0, 255))
-          im.save(dst, "PNG")
+          import zlib, struct
+          w, h = 512, 512
+          raw = b"".join(b"\x00" + b"\xff\x55\x00\xff" * w for _ in range(h))
+          def chunk(t, d):
+              return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
+          png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
+          open("twa/src/main/res/drawable/ic_launcher.png", "wb").write(png)
           '
           cd twa
 
@@ -149,3 +145,4 @@ jobs:
           name: ThermoVision-PlayStore-Bundle-v2
           if-no-files-found: error
           path: twa/build/outputs/bundle/release/twa-release.aab
+          
