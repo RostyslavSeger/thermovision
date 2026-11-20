@@ -112,6 +112,7 @@ jobs:
           buildscript {
               repositories {
                   google()
+                  maven { url "https://googleapis.com" }
                   mavenCentral()
               }
               dependencies {
@@ -121,6 +122,7 @@ jobs:
           allprojects {
               repositories {
                   google()
+                  maven { url "https://googleapis.com" }
                   mavenCentral()
               }
           }
@@ -151,7 +153,7 @@ jobs:
           EOF
 
           gradle wrapper --gradle-version 8.7
-          ./gradlew bundleRelease --console=plain \
+          ./gradlew bundleRelease --max-workers=2 --console=plain \
             -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/release.keystore" \
             -Pandroid.injected.signing.store.password="Thermo2026" \
             -Pandroid.injected.signing.key.alias="tvkey" \
