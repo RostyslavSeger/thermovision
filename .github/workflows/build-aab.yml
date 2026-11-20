@@ -19,21 +19,79 @@ jobs:
             exit 1
           fi
 
-          git clone --depth 1 https://github.com helper
-          cp -r helper/demos/twa-basic twa
+          mkdir -p twa/src/main/res/drawable
           cd twa
 
           python3 -c '
-          import zlib, struct
+          import zlib, struct, xml.dom.minidom as md
+
           w, h = 512, 512
           raw = b"".join(b"\x00" + b"\xff\x55\x00\xff" * w for _ in range(h))
           def chunk(t, d):
               return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
           png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
-          for p in ["src/main/res/drawable/ic_launcher.png", "src/main/res/mipmap-xxxhdpi/ic_launcher.png"]:
-              import os
-              os.makedirs(os.path.dirname(p), exist_ok=True)
-              open(p, "wb").write(png)
+          open("src/main/res/drawable/ic_launcher.png", "wb").write(png)
+
+          doc = md.Document()
+          m = doc.createElement("manifest")
+          m.setAttribute("xmlns:android", "http://android.com")
+          doc.appendChild(m)
+
+          app = doc.createElement("application")
+          app.setAttribute("android:allowBackup", "true")
+          app.setAttribute("android:icon", "@drawable/ic_launcher")
+          app.setAttribute("android:label", "ThermoVision PRO")
+          app.setAttribute("android:supportsRtl", "true")
+          app.setAttribute("android:theme", "@android:style/Theme.Translucent.NoTitleBar")
+          m.appendChild(app)
+
+          md1 = doc.createElement("meta-data")
+          md1.setAttribute("android:name", "asset_statements")
+          md1.setAttribute("android:value", "[{\"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://github.io\"}}]")
+          app.appendChild(md1)
+
+          act = doc.createElement("activity")
+          act.setAttribute("android:name", "com.google.androidbrowserhelper.trusted.LauncherActivity")
+          act.setAttribute("android:exported", "true")
+          act.setAttribute("android:label", "ThermoVision")
+          app.appendChild(act)
+
+          for k, v in [
+              ("android.support.customtabs.trusted.DEFAULT_URL", "https://github.io/thermovision/"),
+              ("android.support.customtabs.trusted.STATUS_BAR_COLOR", "#05070e"),
+              ("android.support.customtabs.trusted.NAVIGATION_BAR_COLOR", "#05070e")
+          ]:
+              el = doc.createElement("meta-data")
+              el.setAttribute("android:name", k)
+              el.setAttribute("android:value", v)
+              act.appendChild(el)
+
+          if1 = doc.createElement("intent-filter")
+          a1 = doc.createElement("action")
+          a1.setAttribute("android:name", "android.intent.action.MAIN")
+          c1 = doc.createElement("category")
+          c1.setAttribute("android:name", "android.intent.category.LAUNCHER")
+          if1.appendChild(a1)
+          if1.appendChild(c1)
+          act.appendChild(if1)
+
+          if2 = doc.createElement("intent-filter")
+          if2.setAttribute("android:autoVerify", "true")
+          a2 = doc.createElement("action")
+          a2.setAttribute("android:name", "android.intent.action.VIEW")
+          c2 = doc.createElement("category")
+          c2.setAttribute("android:name", "android.intent.category.DEFAULT")
+          c3 = doc.createElement("category")
+          c3.setAttribute("android:name", "android.intent.category.BROWSABLE")
+          d1 = doc.createElement("data")
+          d1.setAttribute("android:scheme", "https")
+          d1.setAttribute("android:host", "rostyslavseger.github.io")
+          d1.setAttribute("android:pathPrefix", "/thermovision")
+          for x in (a2, c2, c3, d1):
+              if2.appendChild(x)
+          act.appendChild(if2)
+
+          open("src/main/AndroidManifest.xml", "wb").write(doc.toprettyxml(encoding="utf-8"))
           '
 
           cat << 'EOF' > gradle.properties
@@ -73,18 +131,6 @@ jobs:
                   targetSdk 36
                   versionCode 2
                   versionName "1.0.1"
-                  manifestPlaceholders = [
-                      hostName: "rostyslavseger.github.io",
-                      defaultUrl: "https://github.io",
-                      launcherName: "ThermoVision",
-                      assetStatements: '[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "web", "site": "https://github.io"}}]',
-                      webManifestUrl: "https://github.iomanifest.json",
-                      twaManifestUrl: "https://github.iomanifest.json",
-                      statusBarColor: "#05070e",
-                      navigationColor: "#05070e",
-                      backgroundColor: "#05070e",
-                      splashScreenFadeOutDuration: "300"
-                  ]
               }
               buildTypes {
                   release {
